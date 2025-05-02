@@ -1,0 +1,92 @@
+.staff-login-form-card {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 350px; /* Adjust max width for the form */
+  }
+  
+  .staff-login-form-card h2 {
+    font-size: 1.8em;
+    color: #2c3e50;
+    margin-bottom: 25px;
+  }
+  
+  .staff-avatar-container {
+    margin-bottom: 20px;
+  }
+  
+  .staff-avatar-icon {
+    font-size: 3em;
+    color: #777;
+  }
+  
+  .staff-input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .staff-input-group label {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 5px;
+  }
+  
+  .staff-input-group input[type='text'],
+  .staff-input-group input[type='password'] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+  }
+  
+  .staff-login-button {
+    background-color: #2ecc71; /* A green color for the login button */
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+  }
+  
+  .staff-login-button:hover {
+    background-color: #27ae60;
+  }
+  
+  .staff-back-button {
+    background-color: #f39c12; /* An orange color for the back button */
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
+  }
+  
+  .staff-back-button:hover {
+    background-color: #e67e22;
+  }
+  
+  .staff-register-link {
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 15px;
+  }
+  
+  .staff-register-link a {
+    color: #3498db;
+    text-decoration: none;
+  }
+  
+  .staff-register-link a:hover {
+    text-decoration: underline;
+  }

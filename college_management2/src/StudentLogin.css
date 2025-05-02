@@ -1,0 +1,92 @@
+.student-login-form-card {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 350px; /* Adjust max width for the form */
+  }
+  
+  .student-login-form-card h2 {
+    font-size: 1.8em;
+    color: #2c3e50;
+    margin-bottom: 25px;
+  }
+  
+  .student-avatar-container {
+    margin-bottom: 20px;
+  }
+  
+  .student-avatar-icon {
+    font-size: 3em;
+    color: #777;
+  }
+  
+  .student-input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .student-input-group label {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 5px;
+  }
+  
+  .student-input-group input[type='text'],
+  .student-input-group input[type='password'] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+  }
+  
+  .student-login-button {
+    background-color: #5cb85c; /* A different color for student login button */
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+  }
+  
+  .student-login-button:hover {
+    background-color: #4cae4c;
+  }
+  
+  .student-back-button {
+    background-color: #f39c12; /* Same back button style */
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
+  }
+  
+  .student-back-button:hover {
+    background-color: #e67e22;
+  }
+  
+  .student-register-link {
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 15px;
+  }
+  
+  .student-register-link a {
+    color: #5cb85c; /* Different color for student register link */
+    text-decoration: none;
+  }
+  
+  .student-register-link a:hover {
+    text-decoration: underline;
+  }
