@@ -1,0 +1,84 @@
+.login-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Ensure the container takes up at least the full viewport height */
+    background-color: #f4f4f4; /* A light gray background */
+    padding: 20px;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  }
+  
+  .logo-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .logo-icon {
+    font-size: 2.5em;
+    margin-right: 10px;
+    color: #3498db; /* A blue color for the icon */
+  }
+  
+  .logo-container h1 {
+    font-size: 2.5em;
+    color: #2c3e50; /* A dark blue/gray color for the text */
+    margin: 0;
+  }
+  
+  .selection-card {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%; /* Adjust width as needed */
+    max-width: 400px; /* Maximum width of the card */
+  }
+  
+  .selection-card h2 {
+    font-size: 1.8em;
+    color: #2c3e50;
+    margin-bottom: 20px;
+  }
+  
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .button-group button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button-group button:hover {
+    background-color: #2980b9;
+  }
+  
+  .button-group button i {
+    margin-right: 8px;
+  }
+  
+  .register-link {
+    font-size: 0.9em;
+    color: #777;
+  }
+  
+  .register-link a {
+    color: #3498db;
+    text-decoration: none;
+  }
+  
+  .register-link a:hover {
+    text-decoration: underline;
+  }
