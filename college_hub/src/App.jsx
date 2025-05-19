@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Dashboard from './pages/Dashboard';
+import DashboardLayout from './layouts/DashboardLayout';
 import LoginPage from './pages/LoginPage';
 import MarksPage from './pages/MarksPage';
 import AttendancePage from './pages/AttendancePage';
@@ -19,7 +19,7 @@ function App() {
         {!isAuthenticated ? (
           <Route path="*" element={<LoginPage onLogin={() => setIsAuthenticated(true)} />} />
         ) : (
-          <Route path="/*" element={<Dashboard onLogout={() => setIsAuthenticated(false)} />}>
+          <Route path="/*" element={<DashboardLayout onLogout={() => setIsAuthenticated(false)} />}>
             <Route path="marks" element={<MarksPage />} />
             <Route path="attendance" element={<AttendancePage />} />
             <Route path="timetable" element={<TimetablePage />} />

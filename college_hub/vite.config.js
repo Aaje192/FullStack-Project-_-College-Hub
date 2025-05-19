@@ -1,7 +1,21 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-})
+  plugins: [react({
+    jsxRuntime: 'classic' // Add this line
+  })],
+  build: {
+    commonjsOptions: {
+      include: [/node_modules/],
+    }
+  },
+  server: {
+    host: true, // Needed for GitHub Codespaces
+    port: 5173,
+    strictPort: true,
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.json']
+  }
+});
