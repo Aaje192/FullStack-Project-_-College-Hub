@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import LoginPage from './pages/LoginPage';
+import MarksPage from './pages/MarksPage';
+import AttendancePage from './pages/AttendancePage';
+import TimetablePage from './pages/TimetablePage';
+import ProfilePage from './pages/ProfilePage';
+import TasksPage from './pages/TasksPage';
+import ChatForumsPage from './pages/ChatForumsPage';
+import NotesPage from './pages/NotesPage';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Router>
+      <Routes>
+        {!isAuthenticated ? (
+          <Route path="*" element={<LoginPage onLogin={() => setIsAuthenticated(true)} />} />
+        ) : (
+          <Route path="/*" element={<Dashboard onLogout={() => setIsAuthenticated(false)} />}>
+            <Route path="marks" element={<MarksPage />} />
+            <Route path="attendance" element={<AttendancePage />} />
+            <Route path="timetable" element={<TimetablePage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="tasks" element={<TasksPage />} />
+            <Route path="chat" element={<ChatForumsPage />} />
+            <Route path="notes" element={<NotesPage />} />
+            <Route index element={<Navigate to="/marks" replace />} />
+          </Route>
+        )}
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;

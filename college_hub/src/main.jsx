@@ -7,8 +7,8 @@ import LoginPage from './LoginPage.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     
-    <LoginPage/>
-   
+    
+   <App></App>
     
     
     

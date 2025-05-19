@@ -1,12 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
-  TextField, 
-  Button, 
-  Box, 
-  Typography, 
-  Avatar, 
-  IconButton,
-  InputAdornment
+  TextField, Button, Box, Typography, Avatar, 
+  IconButton, InputAdornment 
 } from '@mui/material';
 import { 
   ArrowBack as BackIcon,
@@ -15,23 +10,19 @@ import {
   School as StudentIcon
 } from '@mui/icons-material';
 
-function StudentLoginForm({ onBack, onSuccess }) {
+const StudentLoginForm = ({ onBack, onSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Student login with:', { username, password });
-    onSuccess(); // This will trigger the navigation
+    // Authentication logic here
+    onSuccess();
   };
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
-      <IconButton onClick={onBack} sx={{ mb: 2 }}>
-        <BackIcon />
-      </IconButton>
-      
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
         <Avatar sx={{ bgcolor: '#2e7d32', width: 56, height: 56, mb: 1 }}>
           <StudentIcon fontSize="large" />
@@ -99,6 +90,6 @@ function StudentLoginForm({ onBack, onSuccess }) {
       </Box>
     </Box>
   );
-}
+};
 
 export default StudentLoginForm;

@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Typography, Paper, IconButton } from '@mui/material';
+import { 
+  Box, Button, Typography, Paper, IconButton, Avatar 
+} from '@mui/material';
 import {
   School as StudentIcon,
   Work as StaffIcon,
   ArrowBack as BackIcon,
   AccountBalance as CollegeIcon
 } from '@mui/icons-material';
-import StaffLoginForm from './StaffLogin';
-import StudentLoginForm from './StudentLogin';
-import './LoginPage.css';
+import StaffLoginForm from './StaffLoginForm';
+import StudentLoginForm from './StudentLoginForm';
 
-function LoginPage({ onLogin }) {
+const LoginPage = ({ onLogin }) => {
   const [userType, setUserType] = useState(null);
   const navigate = useNavigate();
 
@@ -25,7 +26,7 @@ function LoginPage({ onLogin }) {
 
   const handleSuccessfulLogin = () => {
     onLogin();
-    navigate('/marks'); // Redirect to default page after login
+    navigate('/marks');
   };
 
   const renderUserSelection = () => (
@@ -126,6 +127,6 @@ function LoginPage({ onLogin }) {
       {userType === null ? renderUserSelection() : renderLoginForm(userType)}
     </Box>
   );
-}
+};
 
 export default LoginPage;

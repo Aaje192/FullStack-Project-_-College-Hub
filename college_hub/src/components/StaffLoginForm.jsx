@@ -1,42 +1,33 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
-  TextField, 
-  Button, 
-  Box, 
-  Typography, 
-  Avatar, 
-  IconButton,
-  InputAdornment
+  TextField, Button, Box, Typography, Avatar, 
+  IconButton, InputAdornment 
 } from '@mui/material';
 import { 
   ArrowBack as BackIcon,
   Visibility,
   VisibilityOff,
-  School as StudentIcon
+  Work as StaffIcon
 } from '@mui/icons-material';
 
-function StudentLoginForm({ onBack, onSuccess }) {
+const StaffLoginForm = ({ onBack, onSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Student login with:', { username, password });
-    onSuccess(); // This will trigger the navigation
+    // Authentication logic here
+    onSuccess();
   };
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
-      <IconButton onClick={onBack} sx={{ mb: 2 }}>
-        <BackIcon />
-      </IconButton>
-      
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
-        <Avatar sx={{ bgcolor: '#2e7d32', width: 56, height: 56, mb: 1 }}>
-          <StudentIcon fontSize="large" />
+        <Avatar sx={{ bgcolor: '#1976d2', width: 56, height: 56, mb: 1 }}>
+          <StaffIcon fontSize="large" />
         </Avatar>
-        <Typography variant="h5">Student Login</Typography>
+        <Typography variant="h5">Staff Login</Typography>
       </Box>
 
       <TextField
@@ -76,13 +67,7 @@ function StudentLoginForm({ onBack, onSuccess }) {
         fullWidth
         type="submit"
         variant="contained"
-        sx={{ 
-          mt: 3, 
-          mb: 2, 
-          py: 1.5,
-          backgroundColor: '#2e7d32',
-          '&:hover': { backgroundColor: '#1b5e20' }
-        }}
+        sx={{ mt: 3, mb: 2, py: 1.5 }}
       >
         Login
       </Button>
@@ -91,14 +76,14 @@ function StudentLoginForm({ onBack, onSuccess }) {
         <Button 
           color="primary" 
           size="small" 
-          href="/register/student"
+          href="/register/staff"
           sx={{ textTransform: 'none' }}
         >
-          Register as Student
+          Register as Staff
         </Button>
       </Box>
     </Box>
   );
-}
+};
 
-export default StudentLoginForm;
+export default StaffLoginForm;
