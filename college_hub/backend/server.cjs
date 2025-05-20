@@ -8,6 +8,7 @@ const studentRoutes = require('./routes/RegisterRoutes.cjs'); // Add this line
 const chatForumRoutes = require('./routes/ChatForumRoutes.cjs');
 const taskRoutes = require('./routes/TaskRoute.cjs');
 const noteRoutes = require('./routes/NoteRoute.cjs');
+const attendanceRoutes = require('./routes/AttendanceRoutes.cjs');
 
 
 const app = express();
@@ -21,6 +22,7 @@ connectDB()
     app.use('/api/chat', chatForumRoutes);
     app.use('/api/tasks', taskRoutes);
     app.use('/api/notes', noteRoutes); // Notes API
+    app.use('/api/attendance', attendanceRoutes);
 
 
     app.listen(4000, () => {

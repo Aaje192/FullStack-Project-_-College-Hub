@@ -1,8 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const attendanceController = require('../controllers/AttendanceController');
+import axios from "axios";
 
-router.post('/', AttendanceController.markAttendance);
-router.get('/', AttendanceController.getAttendance);
+// Get attendance records for a student and paper
+export const getAttendance = ({ paper, studentId }) =>
+  axios.get("/api/attendance", { params: { paper, studentId } });
 
-module.exports = router;
+// Mark or update attendance for a student
+export const markAttendance = (data) =>
+  axios.post("/api/attendance", data);

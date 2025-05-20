@@ -1,27 +1,34 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const Attendance = require('../models/AttendanceModel.cjs');
 
-// Mark attendance (POST)
-router.post('/', async (req, res) => {
+// Get attendance records for a student and paper
+router.get('/', async (req, res) => {
   try {
-    const { paper, date, hour, status } = req.body;
-    if (!paper || !date || !hour || !status) {
-      return res.status(400).json({ message: 'All fields are required.' });
-    }
-    const attendance = new Attendance({ paper, date, hour, status });
-    await attendance.save();
-    res.status(201).json({ message: 'Attendance marked successfully.' });
+    const { paper, studentId } = req.query;
+    if (!studentId) return res.status(400).json({ message: "studentId required" });
+    const filter = { studentId };
+    if (paper) filter.paper = paper;
+    const records = await Attendance.find(filter);
+    res.json(records);
   } catch (err) {
     res.status(500).json({ message: 'Server error.' });
   }
 });
 
-// Get all attendance records (GET)
-router.get('/', async (req, res) => {
+// Mark or update attendance for a student
+router.post('/', async (req, res) => {
   try {
-    const records = await Attendance.find();
-    res.json(records);
+    const { studentId, paper, date, hour, status } = req.body;
+    if (!studentId || !paper || !date || !hour || !status) {
+      return res.status(400).json({ message: 'All fields are required.' });
+    }
+    await Attendance.findOneAndUpdate(
+      { studentId, paper, date, hour },
+      { status },
+      { upsert: true, new: true }
+    );
+    res.status(201).json({ message: 'Attendance marked successfully.' });
   } catch (err) {
     res.status(500).json({ message: 'Server error.' });
   }
