@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { 
   AppBar, 
@@ -16,10 +15,12 @@ import {
   Notifications as NotificationsIcon,
   AccountCircle as UserIcon
 } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({ onLogout }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -27,6 +28,16 @@ const Navbar = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleProfile = () => {
+    handleClose();
+    navigate('/profile');
+  };
+
+  const handleLogout = () => {
+    handleClose();
+    if (onLogout) onLogout();
   };
 
   return (
@@ -116,10 +127,10 @@ const Navbar = () => {
           open={open}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
+          <MenuItem onClick={handleProfile}>Profile</MenuItem>
           <MenuItem onClick={handleClose}>Settings</MenuItem>
           <Divider />
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </Toolbar>
     </AppBar>
