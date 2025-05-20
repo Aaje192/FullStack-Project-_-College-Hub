@@ -9,6 +9,7 @@ import ProfilePage from './pages/ProfilePage';
 import TasksPage from './pages/TasksPage';
 import ChatForumsPage from './pages/ChatForumsPage';
 import NotesPage from './pages/NotesPage';
+import RegisterStudent from './pages/RegisterStudent';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -17,7 +18,10 @@ function App() {
     <Router>
       <Routes>
         {!isAuthenticated ? (
-          <Route path="*" element={<LoginPage onLogin={() => setIsAuthenticated(true)} />} />
+          <>
+            <Route path="/register" element={<RegisterStudent />} />
+            <Route path="*" element={<LoginPage onLogin={() => setIsAuthenticated(true)} />} />
+          </>
         ) : (
           <Route path="/*" element={<DashboardLayout onLogout={() => setIsAuthenticated(false)} />}>
             <Route path="marks" element={<MarksPage />} />
