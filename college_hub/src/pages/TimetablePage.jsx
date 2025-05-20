@@ -10,7 +10,7 @@ const TimeTablePage = () => {
 
   // Fetch timetable data from backend
   useEffect(() => {
-    fetch('http://localhost:5000/api/TimeTableapi')
+    fetch('http://localhost:5174/api/TimeTableapi')
       .then(res => res.json())
       .then(data => setTimetableData(data))
       .catch(() => setTimetableData([]));
@@ -42,7 +42,7 @@ const TimeTablePage = () => {
       return;
     }
     try {
-      const res = await fetch('http://localhost:5000/api/TimeTableapi', {
+      const res = await fetch('http://localhost:5174/api/TimeTableapi', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ day: newDay, periods: newPeriods }),
@@ -64,7 +64,7 @@ const TimeTablePage = () => {
   // Edit a period in a day
   const handleEdit = async (rowIdx, periodIdx, value) => {
     const day = timetableData[rowIdx].day;
-    const res = await fetch('http://localhost:5000/api/TimeTableapi/period', {
+    const res = await fetch('http://localhost:5174/api/TimeTableapi/period', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ day, periodIdx, value }),
@@ -86,7 +86,7 @@ const TimeTablePage = () => {
   // Delete a day's row
   const handleDeleteRow = async (rowIdx) => {
     const day = timetableData[rowIdx].day;
-    const res = await fetch(`http://localhost:5000/api/TimeTableapi/day/${day}`, {
+    const res = await fetch(`http://localhost:5174/api/TimeTableapi/day/${day}`, {
       method: 'DELETE',
     });
     if (res.ok) {
@@ -99,7 +99,7 @@ const TimeTablePage = () => {
 
   // Delete a period (column) from all days
   const handleDeletePeriod = async (periodIdx) => {
-    const res = await fetch('http://localhost:5000/api/TimeTableapi/delete-period', {
+    const res = await fetch('http://localhost:5174/api/TimeTableapi/delete-period', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ periodIdx }),
