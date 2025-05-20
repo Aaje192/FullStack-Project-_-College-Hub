@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, Paper, IconButton, Avatar } from '@mui/material';
@@ -48,6 +49,9 @@ const LoginPage = ({ onLogin }) => {
         >
           Click to Register
         </Button>
+      </Typography>
+      <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>
+        Sample login: user / 123
       </Typography>
     </Paper>
   );

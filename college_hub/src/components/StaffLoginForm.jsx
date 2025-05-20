@@ -1,16 +1,21 @@
-import { useState } from 'react';
-import { TextField, Button, Box, Typography, Avatar, IconButton, InputAdornment } from '@mui/material';
+import React, { useState } from 'react';
+import { TextField, Button, Box, Typography, Avatar, IconButton, InputAdornment, Alert } from '@mui/material';
 import { Visibility, VisibilityOff, Work } from '@mui/icons-material';
 
 const StaffLoginForm = ({ onSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Authentication logic here
-    console.log('Staff login attempt:', credentials);
-    onSuccess();
+    // Sample credentials
+    if (credentials.username === 'user' && credentials.password === '123') {
+      setError('');
+      onSuccess();
+    } else {
+      setError('Invalid username or password. Try user / 123');
+    }
   };
 
   return (
@@ -19,7 +24,7 @@ const StaffLoginForm = ({ onSuccess }) => {
         <Avatar sx={{ bgcolor: '#1976d2', width: 56, height: 56, mb: 1 }}><Work fontSize="large" /></Avatar>
         <Typography variant="h5">Staff Login</Typography>
       </Box>
-
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <TextField
         fullWidth
         label="Username"
@@ -29,7 +34,6 @@ const StaffLoginForm = ({ onSuccess }) => {
         value={credentials.username}
         onChange={(e) => setCredentials({...credentials, username: e.target.value})}
       />
-
       <TextField
         fullWidth
         label="Password"
@@ -49,10 +53,12 @@ const StaffLoginForm = ({ onSuccess }) => {
           )
         }}
       />
-
       <Button fullWidth type="submit" variant="contained" sx={{ mt: 3, mb: 2, py: 1.5 }}>
         Login
       </Button>
+      <Typography variant="caption" color="text.secondary">
+        Sample: user / 123
+      </Typography>
     </Box>
   );
 };
