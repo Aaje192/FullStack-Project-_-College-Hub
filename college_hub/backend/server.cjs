@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const marksRoutes = require('./routes/marksRoutes.cjs');
+const chatForumRoutes = require('./routes/ChatForumRoutes.cjs');
+app.use('/api/chat', chatForumRoutes);
 
 const app = express();
 app.use(cors());
