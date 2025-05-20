@@ -2,13 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const { connectDB } = require('./db/connection.cjs');
 const marksRoutes = require('./routes/marksRoutes.cjs');
-
-const studentRoutes = require('./routes/RegisterRoutes.cjs'); // Add this line
+ // Add this line
 
 const chatForumRoutes = require('./routes/ChatForumRoutes.cjs');
 const taskRoutes = require('./routes/TaskRoute.cjs');
 const noteRoutes = require('./routes/NoteRoute.cjs');
 const attendanceRoutes = require('./routes/AttendanceRoutes.cjs');
+const timetableRoutes = require('./routes/TimeTableRoutes.cjs');
 
 
 const app = express();
@@ -23,6 +23,7 @@ connectDB()
     app.use('/api/tasks', taskRoutes);
     app.use('/api/notes', noteRoutes); // Notes API
     app.use('/api/attendance', attendanceRoutes);
+    app.use('/api/timetable', timetableRoutes);
 
 
     app.listen(4000, () => {
