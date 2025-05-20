@@ -2,12 +2,13 @@
   "name": "college_management2",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node /workspaces/FullStack-Project-_-College-Hub/college_hub/backend/server.cjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -17,6 +18,7 @@
     "axios": "^1.9.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "mongodb": "^6.16.0",
     "mongoose": "^8.15.0",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",

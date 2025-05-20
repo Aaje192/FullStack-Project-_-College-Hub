@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { 
   AppBar, 
@@ -9,17 +8,23 @@ import {
   Box,
   Menu,
   MenuItem,
-  Divider
+  Divider,
+  Switch,
+  FormControlLabel
 } from '@mui/material';
 import { 
   Menu as MenuIcon,
   Notifications as NotificationsIcon,
   AccountCircle as UserIcon
 } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 
-const Navbar = () => {
+const Navbar = ({ onLogout }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+  const { mode, toggleTheme } = useTheme();
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -27,6 +32,16 @@ const Navbar = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleProfile = () => {
+    handleClose();
+    navigate('/profile');
+  };
+
+  const handleLogout = () => {
+    handleClose();
+    if (onLogout) onLogout();
   };
 
   return (
@@ -100,6 +115,19 @@ const Navbar = () => {
           </Avatar>
         </IconButton>
 
+        {/* Theme Switcher */}
+        <FormControlLabel
+          control={
+            <Switch
+              checked={mode === 'dark'}
+              onChange={toggleTheme}
+              color="default"
+            />
+          }
+          label={mode === 'dark' ? 'Dark' : 'Light'}
+          sx={{ ml: 2 }}
+        />
+
         {/* User Dropdown Menu */}
         <Menu
           id="menu-appbar"
@@ -116,10 +144,10 @@ const Navbar = () => {
           open={open}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
+          <MenuItem onClick={handleProfile}>Profile</MenuItem>
           <MenuItem onClick={handleClose}>Settings</MenuItem>
           <Divider />
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </Toolbar>
     </AppBar>

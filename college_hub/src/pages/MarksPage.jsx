@@ -13,12 +13,26 @@ const MarksPage = () => {
   const [filterValue, setFilterValue] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const reloadMarks = async () => {
+    setLoading(true);
+    try {
+      const data = await getMarks(studentId);
+      setMarks(data);
+      setFilteredMarks(data);
+    } catch (error) {
+      console.error('Error loading marks:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const loadData = async () => {
       try {
         const data = await getMarks(studentId);
         setMarks(data);
         setFilteredMarks(data);
+        console.log('Fetched marks:', data); // <--- Add here
       } catch (error) {
         console.error('Error loading marks:', error);
       } finally {
@@ -30,10 +44,10 @@ const MarksPage = () => {
 
   useEffect(() => {
     const filterData = () => {
-      if (filterCriteria === 'all') {
+      if (filterCriteria === 'all' || filterValue === '') {
         setFilteredMarks(marks);
       } else {
-        const filtered = marks.filter(mark => 
+        const filtered = marks.filter(mark =>
           String(mark[filterCriteria]).toLowerCase() === filterValue.toLowerCase()
         );
         setFilteredMarks(filtered);
@@ -54,12 +68,12 @@ const MarksPage = () => {
     setFilteredMarks(filteredMarks.filter(mark => mark._id !== deletedMarkId));
   };
 
+  console.log('marks:', marks); // <--- Add here
+  console.log('filteredMarks:', filteredMarks); // <--- And here
+
   return (
     <div className="container">
-      <MarksForm onMarkAdded={() => {
-        setFilterCriteria('all');
-        setFilterValue('');
-      }} />
+      <MarksForm onMarkAdded={reloadMarks} />
       
       <div className="filter-controls">
         <div className="filter-row">

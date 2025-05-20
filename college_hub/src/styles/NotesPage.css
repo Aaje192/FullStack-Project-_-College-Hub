@@ -1,0 +1,97 @@
+.notes-page-container {
+  min-height: 100vh;
+  background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+  padding: 32px 0;
+}
+
+.notes-grid {
+  display: flex;
+  flex-direction: row-reverse;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 24px;
+}
+
+.notes-form-section {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 32px 24px;
+  margin-bottom: 24px;
+}
+
+.notes-form-section h5 {
+  font-weight: bold;
+  color: #1976d2;
+  margin-bottom: 18px;
+}
+
+.notes-form-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.notes-form-section .MuiButton-contained {
+  background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
+  color: #fff;
+  font-weight: bold;
+}
+
+.notes-form-section .MuiButton-contained:disabled {
+  background: #bdbdbd;
+}
+
+.notes-display-section {
+  background: #f8fafc;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  padding: 32px 24px;
+  min-height: 500px;
+}
+
+.subject-card {
+  transition: box-shadow 0.2s, transform 0.2s;
+  border-radius: 14px;
+  cursor: pointer;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+  margin-bottom: 18px;
+}
+
+.subject-card.selected,
+.subject-card:hover {
+  box-shadow: 0 6px 24px rgba(25, 118, 210, 0.18);
+  background: linear-gradient(90deg, #e3f2fd 0%, #bbdefb 100%);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.chapter-list .MuiListItemButton-root.selected,
+.chapter-list .MuiListItemButton-root:hover {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.notes-list .MuiPaper-root {
+  background: #f1f8e9;
+  color: #33691e;
+  font-size: 1.08rem;
+  border-radius: 10px;
+}
+
+.notes-list .MuiButton-outlined {
+  border-color: #1976d2;
+  color: #1976d2;
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .notes-grid {
+    flex-direction: column !important;
+  }
+  .notes-form-section,
+  .notes-display-section {
+    margin-bottom: 24px;
+    min-width: 0;
+  }
+}
