@@ -2,9 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const { connectDB } = require('./db/connection.cjs');
 const marksRoutes = require('./routes/marksRoutes.cjs');
+
+const studentRoutes = require('./routes/RegisterRoutes.cjs'); // Add this line
+
 const chatForumRoutes = require('./routes/ChatForumRoutes.cjs');
 const taskRoutes = require('./routes/TaskRoute.cjs');
 const noteRoutes = require('./routes/NoteRoute.cjs');
+
 
 const app = express();
 app.use(cors());
@@ -18,6 +22,7 @@ connectDB()
     app.use('/api/tasks', taskRoutes);
     app.use('/api/notes', noteRoutes); // Notes API
 
+
     app.listen(4000, () => {
       console.log('Server running on port 4000');
     });
@@ -26,3 +31,4 @@ connectDB()
     console.error('Failed to connect to MongoDB:', err);
     process.exit(1);
   });
+
