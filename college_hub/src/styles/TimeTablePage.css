@@ -1,0 +1,111 @@
+.timetable-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 24px 32px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+}
+
+.timetable-title {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 28px;
+  color: #2d3a4a;
+  letter-spacing: 1px;
+}
+
+.timetable-add-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.timetable-add-row input[type="text"] {
+  padding: 7px 10px;
+  border: 1px solid #bfc9d1;
+  border-radius: 6px;
+  font-size: 1rem;
+  width: 90px;
+  transition: border 0.2s;
+}
+
+.timetable-add-row input[type="text"]:focus {
+  border: 1.5px solid #4a90e2;
+  outline: none;
+}
+
+.timetable-add-row button {
+  padding: 8px 18px;
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.timetable-add-row button:hover {
+  background: #357ab8;
+}
+
+.timetable-message {
+  color: #27ae60;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.timetable-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #f9fbfc;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.timetable-table th, .timetable-table td {
+  padding: 10px 8px;
+  text-align: center;
+}
+
+.timetable-table th {
+  background: #eaf1f8;
+  color: #2d3a4a;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.timetable-table tr:nth-child(even) {
+  background: #f4f8fb;
+}
+
+.timetable-table input[type="text"] {
+  width: 80px;
+  padding: 5px 7px;
+  border: 1px solid #bfc9d1;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.timetable-table input[type="text"]:focus {
+  border: 1.5px solid #4a90e2;
+  outline: none;
+}
+
+.timetable-table button {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.timetable-table button:hover {
+  background: #c0392b;
+}

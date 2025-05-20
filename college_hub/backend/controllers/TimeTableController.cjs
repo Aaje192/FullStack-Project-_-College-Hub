@@ -1,50 +1,56 @@
-const Timetable = require('../models/TimetableModel');
+const Timetable = require("../models/TimeTableModel.cjs");
 
-// Get all timetable entries
+// Get timetable for a student
 exports.getTimetable = async (req, res) => {
   try {
-    const timetable = await Timetable.find();
-    res.json(timetable);
+    const { studentId } = req.query;
+    if (!studentId) return res.status(400).json({ message: "studentId required" });
+    const records = await Timetable.find({ studentId });
+    res.json(records);
   } catch (err) {
-    res.status(500).json({ message: 'Server error.' });
+    res.status(500).json({ message: "Server error." });
   }
 };
 
-// Update a period in a day's timetable
-exports.updatePeriod = async (req, res) => {
-  const { day, periodIdx, value } = req.body;
+// Add a new day
+exports.addDay = async (req, res) => {
   try {
-    const timetable = await Timetable.findOne({ day });
-    if (!timetable) return res.status(404).json({ message: 'Day not found.' });
-    timetable.periods[periodIdx] = value;
-    await timetable.save();
-    res.json({ message: 'Period updated.' });
+    const { studentId, day, periods } = req.body;
+    if (!studentId || !day || !periods) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+    // Prevent duplicate days for the same student
+    const exists = await Timetable.findOne({ studentId, day });
+    if (exists) return res.status(409).json({ message: "Day already exists." });
+    const newDay = new Timetable({ studentId, day, periods });
+    await newDay.save();
+    res.status(201).json(newDay);
   } catch (err) {
-    res.status(500).json({ message: 'Server error.' });
+    res.status(500).json({ message: "Server error." });
   }
 };
 
-// Delete a day's timetable
+// Update a period in a day
+exports.updatePeriod = async (req, res) => {
+  try {
+    const { studentId, day, periodIdx, value } = req.body;
+    const doc = await Timetable.findOne({ studentId, day });
+    if (!doc) return res.status(404).json({ message: "Day not found" });
+    doc.periods[periodIdx] = value;
+    await doc.save();
+    res.json(doc);
+  } catch (err) {
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
+// Delete a day
 exports.deleteDay = async (req, res) => {
   try {
-    await Timetable.deleteOne({ day: req.params.day });
-    res.json({ message: 'Day deleted.' });
+    const { studentId, day } = req.params;
+    await Timetable.deleteOne({ studentId, day });
+    res.json({ message: "Deleted" });
   } catch (err) {
-    res.status(500).json({ message: 'Server error.' });
-  }
-};
-
-// Delete a period (column) from all days
-exports.deletePeriod = async (req, res) => {
-  const { periodIdx } = req.body;
-  try {
-    const timetables = await Timetable.find();
-    for (const t of timetables) {
-      t.periods.splice(periodIdx, 1);
-      await t.save();
-    }
-    res.json({ message: 'Period deleted from all days.' });
-  } catch (err) {
-    res.status(500).json({ message: 'Server error.' });
+    res.status(500).json({ message: "Server error." });
   }
 };
