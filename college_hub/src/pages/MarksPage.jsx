@@ -19,6 +19,7 @@ const MarksPage = () => {
         const data = await getMarks(studentId);
         setMarks(data);
         setFilteredMarks(data);
+        console.log('Fetched marks:', data); // <--- Add here
       } catch (error) {
         console.error('Error loading marks:', error);
       } finally {
@@ -53,6 +54,9 @@ const MarksPage = () => {
     setMarks(marks.filter(mark => mark._id !== deletedMarkId));
     setFilteredMarks(filteredMarks.filter(mark => mark._id !== deletedMarkId));
   };
+
+  console.log('marks:', marks); // <--- Add here
+  console.log('filteredMarks:', filteredMarks); // <--- And here
 
   return (
     <div className="container">
