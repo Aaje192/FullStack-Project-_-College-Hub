@@ -12,14 +12,13 @@ const MarksForm = ({ onMarkAdded }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!subject || !examType || !semester || !mark) return;
-
-    await addMark({ studentId, subject, examType, semester, mark });
-    setSubject('');
-    setExamType('');
-    setSemester('');
-    setMark('');
-    onMarkAdded();
+    try {
+      await addMark({ studentId, subject, examType, semester, mark });
+      if (onMarkAdded) onMarkAdded(); // <-- call this to reload marks
+      // Optionally reset form here
+    } catch (error) {
+      // handle error
+    }
   };
 
   return (
