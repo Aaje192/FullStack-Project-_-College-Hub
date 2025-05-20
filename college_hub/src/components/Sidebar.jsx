@@ -11,8 +11,11 @@ import {
   Notes as NotesIcon,
   ExitToApp as LogoutIcon
 } from '@mui/icons-material';
+import { useTheme } from '../context/ThemeContext';
 
 const Sidebar = ({ onLogout }) => {
+  const { mode } = useTheme();
+
   const menuItems = [
     { text: 'Marks', icon: <MarksIcon />, path: '/marks', desc: 'View your academic marks' },
     { text: 'Attendance', icon: <AttendanceIcon />, path: '/attendance', desc: 'View and manage attendance' },
@@ -32,12 +35,14 @@ const Sidebar = ({ onLogout }) => {
         '& .MuiDrawer-paper': {
           width: 280,
           boxSizing: 'border-box',
-          backgroundColor: '#f5f5f5',
+          backgroundColor: 'var(--sidebar-bg)',
+          color: 'var(--sidebar-text)',
+          borderRight: mode === 'light' ? '1px solid #e0e0e0' : '1px solid #23272f',
         },
       }}
     >
       <Box sx={{ p: 2, textAlign: 'center' }}>
-        <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#1976d2' }}>
+        <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'var(--sidebar-active)' }}>
           KOLLEGE
         </Typography>
       </Box>
@@ -52,23 +57,24 @@ const Sidebar = ({ onLogout }) => {
             component={Link} 
             to={item.path}
             sx={{
-              '&:hover': { backgroundColor: '#e3f2fd' },
+              '&:hover': { backgroundColor: mode === 'light' ? '#e3f2fd' : '#263245' },
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'flex-start',
               py: 2,
+              color: 'var(--sidebar-text)',
             }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <ListItemIcon sx={{ minWidth: '40px' }}>{item.icon}</ListItemIcon>
+              <ListItemIcon sx={{ minWidth: '40px', color: 'var(--sidebar-text)' }}>{item.icon}</ListItemIcon>
               <ListItemText 
                 primary={item.text} 
-                primaryTypographyProps={{ fontWeight: 'medium' }}
+                primaryTypographyProps={{ fontWeight: 'medium', color: 'var(--sidebar-text)' }}
               />
             </Box>
             <Typography variant="body2" sx={{ 
               pl: 6, 
-              color: 'text.secondary',
+              color: mode === 'light' ? 'text.secondary' : '#b0bec5',
               fontStyle: 'italic',
               fontSize: '0.8rem'
             }}>
@@ -84,11 +90,14 @@ const Sidebar = ({ onLogout }) => {
         button 
         onClick={onLogout}
         sx={{
-          '&:hover': { backgroundColor: '#ffebee' },
+          '&:hover': { backgroundColor: mode === 'light' ? '#ffebee' : '#3a2323' },
           py: 2,
+          color: 'var(--sidebar-text)',
         }}
       >
-        <ListItemIcon sx={{ minWidth: '40px' }}><LogoutIcon color="error" /></ListItemIcon>
+        <ListItemIcon sx={{ minWidth: '40px', color: 'var(--sidebar-text)' }}>
+          <LogoutIcon color="error" />
+        </ListItemIcon>
         <ListItemText 
           primary="Logout" 
           primaryTypographyProps={{ color: 'error' }}

@@ -8,7 +8,9 @@ import {
   Box,
   Menu,
   MenuItem,
-  Divider
+  Divider,
+  Switch,
+  FormControlLabel
 } from '@mui/material';
 import { 
   Menu as MenuIcon,
@@ -16,11 +18,13 @@ import {
   AccountCircle as UserIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 
 const Navbar = ({ onLogout }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const { mode, toggleTheme } = useTheme();
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -110,6 +114,19 @@ const Navbar = ({ onLogout }) => {
             <UserIcon fontSize="small" />
           </Avatar>
         </IconButton>
+
+        {/* Theme Switcher */}
+        <FormControlLabel
+          control={
+            <Switch
+              checked={mode === 'dark'}
+              onChange={toggleTheme}
+              color="default"
+            />
+          }
+          label={mode === 'dark' ? 'Dark' : 'Light'}
+          sx={{ ml: 2 }}
+        />
 
         {/* User Dropdown Menu */}
         <Menu

@@ -1,10 +1,64 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Ensure the app takes full height and width */
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg-main);
+  color: var(--text-main);
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
+/* Main app container for content (excluding sidebar/navbar) */
+.app-content {
+  min-height: calc(100vh - 64px); /* Adjust 64px if your navbar is taller/shorter */
+  padding: 32px 16px;
+  background: var(--bg-main);
+  color: var(--text-main);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Card style for main content blocks */
+.card {
+  padding: 2em;
+  background: var(--bg-card);
+  color: var(--text-main);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 24px;
+}
+
+/* Sidebar and Navbar */
+.sidebar {
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+}
+
+.navbar {
+  background: var(--navbar-bg);
+  color: var(--navbar-text);
+  box-shadow: var(--card-shadow);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .app-content {
+    padding: 16px 4px;
+  }
+  .card {
+    padding: 1em;
+  }
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* Keep your logo and animation styles as needed */
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -31,12 +85,4 @@
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
