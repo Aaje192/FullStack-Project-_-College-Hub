@@ -5,6 +5,7 @@ const marksRoutes = require('./routes/marksRoutes.cjs');
 const chatForumRoutes = require('./routes/ChatForumRoutes.cjs');
 const taskRoutes = require('./routes/TaskRoute.cjs');
 const noteRoutes = require('./routes/NoteRoute.cjs');
+const attendanceRoutes = require('./routes/AttendanceRoutes.cjs');
 
 const app = express();
 app.use(cors());
@@ -17,6 +18,7 @@ connectDB()
     app.use('/api/chat', chatForumRoutes);
     app.use('/api/tasks', taskRoutes);
     app.use('/api/notes', noteRoutes); // Notes API
+    app.use('/api/attendance', attendanceRoutes);
 
     app.listen(4000, () => {
       console.log('Server running on port 4000');
