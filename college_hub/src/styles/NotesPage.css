@@ -1,23 +1,32 @@
-.notes-page-container {
+.notes-page-root {
   min-height: 100vh;
-  background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+  background: var(--bg-main, #f5f7fa);
   padding: 32px 0;
+  transition: background 0.3s;
+  color: var(--text-main, #222);
+  box-sizing: border-box;
 }
 
 .notes-grid {
-  display: flex;
-  flex-direction: row-reverse;
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
-  gap: 24px;
+  align-items: stretch;
 }
 
-.notes-form-section {
-  background: #fff;
+.notes-form-section,
+.notes-display-section {
+  background: var(--bg-card, #fff);
   border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  box-shadow: var(--card-shadow, 0 4px 24px rgba(0,0,0,0.08));
   padding: 32px 24px;
   margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  color: var(--text-main, #222);
+  min-height: 600px;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .notes-form-section h5 {
@@ -30,39 +39,27 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
-}
-
-.notes-form-section .MuiButton-contained {
-  background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
-  color: #fff;
-  font-weight: bold;
-}
-
-.notes-form-section .MuiButton-contained:disabled {
-  background: #bdbdbd;
+  flex: 1;
 }
 
 .notes-display-section {
-  background: #f8fafc;
-  border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-  padding: 32px 24px;
-  min-height: 500px;
+  /* Already styled above */
 }
 
 .subject-card {
   transition: box-shadow 0.2s, transform 0.2s;
   border-radius: 14px;
   cursor: pointer;
-  background: #fff;
+  background: var(--bg-card, #fff);
   box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
   margin-bottom: 18px;
+  color: var(--text-main, #222);
 }
 
 .subject-card.selected,
 .subject-card:hover {
   box-shadow: 0 6px 24px rgba(25, 118, 210, 0.18);
-  background: linear-gradient(90deg, #e3f2fd 0%, #bbdefb 100%);
+  background: #e3f2fd;
   transform: translateY(-2px) scale(1.03);
 }
 
@@ -88,10 +85,14 @@
 @media (max-width: 900px) {
   .notes-grid {
     flex-direction: column !important;
+    gap: 0;
   }
   .notes-form-section,
   .notes-display-section {
     margin-bottom: 24px;
     min-width: 0;
+    padding: 18px 8px;
+    min-height: unset;
+    height: unset;
   }
 }
