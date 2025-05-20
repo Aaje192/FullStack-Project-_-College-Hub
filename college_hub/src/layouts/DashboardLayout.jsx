@@ -9,7 +9,7 @@ const DashboardLayout = ({ onLogout }) => {
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       <Sidebar onLogout={onLogout} />
       <Box component="main" sx={{ flexGrow: 1, overflow: 'auto' }}>
-        <Navbar />
+        <Navbar onLogout={onLogout} /> {/* Pass onLogout here */}
         <Box sx={{ p: 3 }}>
           <Outlet />
         </Box>

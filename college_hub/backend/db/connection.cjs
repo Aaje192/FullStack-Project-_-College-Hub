@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/marksDB', {
+    await mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://lokesh:<db_password>@collegehub.aytnv9z.mongodb.net/?retryWrites=true&w=majority&appName=CollegeHub', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
