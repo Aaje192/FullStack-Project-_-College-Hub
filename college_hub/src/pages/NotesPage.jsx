@@ -279,9 +279,3 @@ const NotesPage = () => {
 };
 
 export default NotesPage;
-
-useEffect(() => {
-  for (const key in themeVars) {
-    document.body.style.setProperty(key, themeVars[key]);
-  }
-}, [themeVars]);

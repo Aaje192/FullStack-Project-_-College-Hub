@@ -42,9 +42,7 @@
   flex: 1;
 }
 
-.notes-display-section {
-  /* Already styled above */
-}
+
 
 .subject-card {
   transition: box-shadow 0.2s, transform 0.2s;

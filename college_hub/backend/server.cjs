@@ -16,10 +16,7 @@ connectDB()
     app.use('/api/marks', marksRoutes);
     app.use('/api/chat', chatForumRoutes);
     app.use('/api/tasks', taskRoutes);
-    app.use('/api/notes', noteRoutes); // <-- Add this line
-
-    // Serve uploaded files
-    app.use('/uploads', express.static('uploads'));
+    app.use('/api/notes', noteRoutes); // Notes API
 
     app.listen(4000, () => {
       console.log('Server running on port 4000');
