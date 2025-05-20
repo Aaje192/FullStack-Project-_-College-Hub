@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = 'http://localhost:5174/api/marks';
+const API = '/api/marks';
 
 // Get marks for a specific student
 export const getMarks = async (studentId) => {
