@@ -1,6 +1,6 @@
 // ======= frontend/src/api/Marksapi.js =======
 import axios from 'axios';
-const API = 'http://localhost:4000/api/marks'
+const API = '/api/marks'
 
 export const getMarks = async (studentId) => {
   const res = await axios.get(`${API}/student/${studentId}`);
