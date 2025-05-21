@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getAttendance, markAttendance } from "../api/Attendanceapi";
 import "../styles/Attendance.css";
 
-const studentId = "1234567890"; // Hardcoded for now
-
-function AttendancePage() {
+function AttendancePage({ userId }) {
   const [paper, setPaper] = useState("");
   const [date, setDate] = useState("");
   const [hour, setHour] = useState("");
@@ -14,15 +12,15 @@ function AttendancePage() {
   const [totalHours, setTotalHours] = useState("");
 
   useEffect(() => {
-    if (paper) {
-      getAttendance({ paper, studentId })
+    if (paper && userId) {
+      getAttendance({ paper, studentId: userId })
         .then((res) => setAttendanceRecords(res.data))
         .catch(() => setAttendanceRecords([]));
     } else {
       setAttendanceRecords([]);
       setTotalHours("");
     }
-  }, [paper]);
+  }, [paper, userId]);
 
   const presentHours = attendanceRecords.filter((r) => r.status === "Present").length;
   const absentHours = attendanceRecords.filter((r) => r.status === "Absent").length;
@@ -38,11 +36,11 @@ function AttendancePage() {
       return;
     }
     try {
-      const response = await markAttendance({ studentId, paper, date, hour, status });
+      const response = await markAttendance({ studentId: userId, paper, date, hour, status });
       const data = response.data;
       if (response.status === 200 || response.status === 201) {
         setMessage(data.message || "Attendance marked successfully.");
-        getAttendance({ paper, studentId })
+        getAttendance({ paper, studentId: userId })
           .then((res) => setAttendanceRecords(res.data))
           .catch(() => setAttendanceRecords([]));
       } else {
@@ -115,6 +113,7 @@ function AttendancePage() {
               minWidth: 260,
               maxWidth: 340,
             }}
+            className="attendance-summary"
           >
             <h3>Attendance Summary for {paper}</h3>
             <p>Total Hours: {totalHours || 0}</p>

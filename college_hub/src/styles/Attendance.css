@@ -74,3 +74,51 @@
   color: green;
   font-weight: bold;
 }
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .attendance-container {
+    background-color: #23272f;
+    color: #f4f7f8;
+  }
+  .attendance-heading {
+    color: #f4f7f8;
+  }
+  .form-group label {
+    color: #e0e0e0;
+  }
+  .form-group select,
+  .form-group input[type="date"] {
+    background-color: #23272f;
+    color: #f4f7f8;
+    border: 1px solid #444;
+  }
+  .form-group select:focus,
+  .form-group input[type="date"]:focus {
+    border-color: #90caf9;
+  }
+  .button-group button {
+    background-color: #1976d2;
+    color: #fff;
+  }
+  .button-group button:hover {
+    background-color: #1565c0;
+  }
+  .confirmation-message {
+    color: #90ee90;
+  }
+}
+
+/* Custom selection color for attendance page */
+/* Apply to the whole page if needed */
+.attendance-container ::selection,
+.attendance-container *::selection {
+  background: #b3d4fc !important;
+  color: #111 !important;
+}
+
+/* Make attendance summary text always black */
+.attendance-summary,
+.attendance-summary * {
+  color: #111 !important;
+}
