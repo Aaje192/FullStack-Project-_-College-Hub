@@ -8,7 +8,7 @@ export const getMarks = async (studentId) => {
   return res.data;
 };
 
-// Get all marks (optional if backend supports this)
+// Get all marks
 export const getAllMarks = async () => {
   const res = await axios.get(`${API}/all`);
   return res.data;

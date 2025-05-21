@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Post a new message
+//TO POST A MESSAGE
 router.post('/', async (req, res) => {
   try {
     const { topic, user, text } = req.body;
@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Post a reply to a message
+// TO REPLY TO A MESSAGE
 router.post('/:id/reply', async (req, res) => {
   try {
     const { id } = req.params;

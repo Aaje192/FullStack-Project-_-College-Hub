@@ -20,7 +20,7 @@ const ChatForumsPage = () => {
     }
   }, [topic]);
 
-  // Post a new message
+  //POST A MESSAGE
   const handlePost = async () => {
     if (!topic.trim() || !newMessage.trim()) {
       setInfo('Please enter a topic and message.');
