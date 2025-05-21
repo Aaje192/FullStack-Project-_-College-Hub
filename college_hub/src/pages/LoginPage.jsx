@@ -12,8 +12,8 @@ const LoginPage = ({ onLogin }) => {
 
   const handleUserTypeSelection = (type) => setUserType(type);
   const handleGoBack = () => setUserType(null);
-  const handleSuccessfulLogin = () => {
-    onLogin();
+  const handleSuccessfulLogin = (userId) => {
+    onLogin(userId);
     navigate('/marks');
   };
 
@@ -60,7 +60,7 @@ const LoginPage = ({ onLogin }) => {
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', p: 2 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 4, color: '#1976d2' }}>
         <AccountBalance sx={{ fontSize: 40, mr: 1.5 }} />
-        <Typography variant="h3" component="h1" sx={{ fontWeight: 'bold' }}>KOLLEGE</Typography>
+        <Typography variant="h3" component="h1" sx={{ fontWeight: 'bold' }}>COLLEGE HUB</Typography>
       </Box>
       {userType ? (
         <Paper elevation={3} sx={{ p: 4, width: 400, position: 'relative', borderRadius: 2 }}>
@@ -72,6 +72,16 @@ const LoginPage = ({ onLogin }) => {
           )}
         </Paper>
       ) : renderUserSelection()}
+      <Box>
+        <Button
+          fullWidth
+          variant="text"
+          sx={{ mt: 1 }}
+          onClick={() => navigate('/register')}
+        >
+          Don't have an account? Register
+        </Button>
+      </Box>
     </Box>
   );
 };

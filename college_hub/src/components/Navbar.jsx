@@ -46,15 +46,15 @@ const Navbar = ({ onLogout }) => {
 
   return (
     <AppBar 
-      position="fixed" 
-      sx={{ 
-        zIndex: (theme) => theme.zIndex.drawer + 1,
-        backgroundColor: 'white',
-        color: 'text.primary',
-        boxShadow: 'none',
-        borderBottom: '1px solid rgba(0, 0, 0, 0.12)'
-      }}
-    >
+  position="fixed" 
+  sx={{ 
+    zIndex: (theme) => theme.zIndex.drawer + 1,
+    backgroundColor: (theme) => theme.palette.background.default,
+    color: (theme) => theme.palette.text.primary,
+    boxShadow: 'none',
+    borderBottom: (theme) => `1px solid ${theme.palette.divider}`
+  }}
+>
       <Toolbar>
         {/* Sidebar toggle button (for mobile) */}
         <IconButton
@@ -87,7 +87,7 @@ const Navbar = ({ onLogout }) => {
               fontSize: '1.5rem'
             }}
           >
-            KOLLEGE
+            COLLEGE HUB
           </Box>
         </Typography>
 

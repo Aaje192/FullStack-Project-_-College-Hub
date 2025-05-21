@@ -1,17 +1,10 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const controller = require('../controllers/TimetableController');
+const TimetableController = require("../controllers/TimeTableController.cjs");
 
-// Get all timetable data
-router.get('/', controller.getTimetable);
-
-// Update a period in a day
-router.put('/period', controller.updatePeriod);
-
-// Delete a day
-router.delete('/day/:day', controller.deleteDay);
-
-// Delete a period (column) from all days
-router.put('/delete-period', controller.deletePeriod);
+router.get("/", TimetableController.getTimetable);
+router.post("/", TimetableController.addDay);
+router.put("/period", TimetableController.updatePeriod); // <--- THIS LINE IS REQUIRED
+router.delete("/:studentId/:day", TimetableController.deleteDay);
 
 module.exports = router;
