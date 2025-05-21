@@ -2,18 +2,24 @@
 import React, { useState } from 'react';
 import { addMark } from '../api/Marksapi';
 
-const MarksForm = ({ onMarkAdded }) => {
+const MarksForm = ({ onMarkAdded, userId }) => {
   const [subject, setSubject] = useState('');
   const [examType, setExamType] = useState('');
   const [semester, setSemester] = useState('');
   const [mark, setMark] = useState('');
 
-  const studentId = '1234567890';
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const payload = {
+      subject,
+      examType,
+      semester,
+      mark,
+      studentId: userId, // <-- Make sure this matches your backend field
+    };
+    console.log('Submitting payload:', payload);
     try {
-      await addMark({ studentId, subject, examType, semester, mark });
+      await addMark(payload);
       if (onMarkAdded) onMarkAdded(); // <-- call this to reload marks
       // Optionally reset form here
     } catch (error) {

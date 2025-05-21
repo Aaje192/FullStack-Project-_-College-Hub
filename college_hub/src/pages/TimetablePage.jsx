@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { getTimetable, addDay, updatePeriod, deleteDay } from "../api/TimeTableapi.js";
 import "../styles/TimeTablePage.css";
 
-const studentId = "1234567890";
 const defaultPeriods = 8;
 
-function TimetablePage() {
+function TimetablePage({ userId }) {
   const [timetableData, setTimetableData] = useState([]);
   const [newDay, setNewDay] = useState("");
   const [newPeriods, setNewPeriods] = useState(Array(defaultPeriods).fill(""));
@@ -13,14 +12,14 @@ function TimetablePage() {
 
   // Load timetable or initialize with blank periods
   useEffect(() => {
-    getTimetable(studentId)
+    getTimetable(userId)
       .then((res) => {
         const data = res.data;
         const filled = defaultDays.map((day) => {
           const found = data.find((row) => row.day === day);
           return found
             ? { ...found, periods: [...found.periods, ...Array(defaultPeriods - found.periods.length).fill("")].slice(0, defaultPeriods) }
-            : { day, studentId, periods: Array(defaultPeriods).fill("") };
+            : { day, studentId: userId, periods: Array(defaultPeriods).fill("") };
         });
         setTimetableData(filled);
       })
@@ -28,12 +27,12 @@ function TimetablePage() {
         setTimetableData(
           defaultDays.map((day) => ({
             day,
-            studentId,
+            studentId: userId,
             periods: Array(defaultPeriods).fill(""),
           }))
         );
       });
-  }, []);
+  }, [userId]);
 
   const handleAddDay = async () => {
     if (!newDay.trim() || newPeriods.some((p) => !p.trim())) {
@@ -41,7 +40,7 @@ function TimetablePage() {
       return;
     }
     try {
-      const res = await addDay({ studentId, day: newDay, periods: newPeriods });
+      const res = await addDay({ studentId: userId, day: newDay, periods: newPeriods });
       setTimetableData((prev) => [...prev, res.data]);
       setNewDay("");
       setNewPeriods(Array(defaultPeriods).fill(""));
@@ -69,7 +68,7 @@ function TimetablePage() {
       // Save each period (or you can create a backend API to update all at once)
       await Promise.all(
         row.periods.map((value, periodIdx) =>
-          updatePeriod({ studentId, day: row.day, periodIdx, value })
+          updatePeriod({ studentId: userId, day: row.day, periodIdx, value })
         )
       );
       setMessage(`Saved changes for ${row.day}.`);
@@ -81,7 +80,7 @@ function TimetablePage() {
   const handleEdit = async (rowIdx, periodIdx, value) => {
     const day = timetableData[rowIdx].day;
     try {
-      await updatePeriod({ studentId, day, periodIdx, value });
+      await updatePeriod({ studentId: userId, day, periodIdx, value });
       setTimetableData((prev) =>
         prev.map((row, i) =>
           i === rowIdx
@@ -98,7 +97,7 @@ function TimetablePage() {
   const handleDeleteRow = async (rowIdx) => {
     const day = timetableData[rowIdx].day;
     try {
-      await deleteDay(studentId, day);
+      await deleteDay(userId, day);
       setTimetableData((prev) => prev.filter((_, i) => i !== rowIdx));
       setMessage("Day deleted.");
     } catch {

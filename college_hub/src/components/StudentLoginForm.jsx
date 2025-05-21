@@ -9,19 +9,25 @@ import {
   School 
 } from '@mui/icons-material';
 
+import { loginUser } from '../api/Userapi';
+
 const StudentLoginForm = ({ onSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Sample credentials
-    if (credentials.username === 'user' && credentials.password === '123') {
-      setError('');
-      onSuccess();
-    } else {
-      setError('Invalid username or password. Try user / 123');
+    setError('');
+    try {
+      const res = await loginUser(credentials);
+      if (res.data && res.data.message === 'Login successful.') {
+        onSuccess(res.data.id); // Pass the id to parent
+      } else {
+        setError(res.data.message || 'Login failed.');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login failed.');
     }
   };
 
