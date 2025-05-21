@@ -130,35 +130,37 @@ function TimetablePage({ userId }) {
         <button onClick={handleAddDay}>Add Day</button>
       </div>
       {message && <p className="timetable-message">{message}</p>}
-      <table className="timetable-table">
-        <thead>
-          <tr>
-            <th>Day</th>
-            {Array.from({ length: defaultPeriods }).map((_, idx) => (
-              <th key={idx}>Period {idx + 1}</th>
-            ))}
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {timetableData.map((row, rowIdx) => (
-            <tr key={row.day}>
-              <td>{row.day}</td>
-              {row.periods.map((period, periodIdx) => (
-                <td key={periodIdx}>
-                  <input
-                    value={period}
-                    onChange={(e) => handleEdit(rowIdx, periodIdx, e.target.value)}
-                  />
-                </td>
+      <div className="timetable-table-wrapper">
+        <table className="timetable-table">
+          <thead>
+            <tr>
+              <th>Day</th>
+              {Array.from({ length: defaultPeriods }).map((_, idx) => (
+                <th key={idx}>Period {idx + 1}</th>
               ))}
-              <td>
-                <button onClick={() => handleDeleteRow(rowIdx)}>Delete</button>
-              </td>
+              <th>Delete</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {timetableData.map((row, rowIdx) => (
+              <tr key={row.day}>
+                <td>{row.day}</td>
+                {row.periods.map((period, periodIdx) => (
+                  <td key={periodIdx}>
+                    <input
+                      value={period}
+                      onChange={(e) => handleEdit(rowIdx, periodIdx, e.target.value)}
+                    />
+                  </td>
+                ))}
+                <td>
+                  <button onClick={() => handleDeleteRow(rowIdx)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
