@@ -1,235 +1,150 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import '../styles/TimeTablePage.css';
 
-const defaultPeriods = 8;
+const Button = ({ children, onClick, style = {} }) => {
+  return (
+    <button onClick={onClick} className="custom-button" style={style}>
+      {children}
+    </button>
+  );
+};
 
 const TimeTablePage = () => {
   const [timetableData, setTimetableData] = useState([]);
+  const [editIndex, setEditIndex] = useState(null);
+  const [editedPeriods, setEditedPeriods] = useState([]);
   const [newDay, setNewDay] = useState('');
-  const [newPeriods, setNewPeriods] = useState(Array(defaultPeriods).fill(''));
-  const [message, setMessage] = useState('');
+  const [newPeriods, setNewPeriods] = useState(Array(8).fill(''));
 
-  // Fetch timetable data from backend
-  useEffect(() => {
-    fetch('http://localhost:5174/api/TimeTableapi')
-      .then(res => res.json())
-      .then(data => setTimetableData(data))
-      .catch(() => setTimetableData([]));
-  }, []);
+  const dayOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-  const tableStyle = {
-    borderCollapse: 'collapse',
-    width: '100%',
-    marginTop: '20px',
-    fontSize: '18px',
+  const handleEdit = (index) => {
+    setEditIndex(index);
+    setEditedPeriods([...timetableData[index].periods]);
   };
 
-  const thTdStyle = {
-    border: '2px solid #ccc',
-    padding: '12px',
-    textAlign: 'center',
+  const handleSave = (index) => {
+    const updated = [...timetableData];
+    updated[index].periods = editedPeriods;
+    setTimetableData(updated);
+    setEditIndex(null);
   };
 
-  const headerStyle = {
-    ...thTdStyle,
-    backgroundColor: '#f2f2f2',
-    fontWeight: 'bold',
+  const handleDelete = (index) => {
+    if (window.confirm('Are you sure you want to delete this day?')) {
+      const updated = timetableData.filter((_, i) => i !== index);
+      setTimetableData(updated);
+    }
   };
 
-  // Add a new day to the timetable
-  const handleAddDay = async () => {
-    if (!newDay.trim() || newPeriods.some(p => !p.trim())) {
-      setMessage('Please fill all fields for the new day.');
+  const handleChange = (value, periodIndex) => {
+    const updated = [...editedPeriods];
+    updated[periodIndex] = value;
+    setEditedPeriods(updated);
+  };
+
+  const handleNewPeriodChange = (value, index) => {
+    const updated = [...newPeriods];
+    updated[index] = value;
+    setNewPeriods(updated);
+  };
+
+  const handleAddDay = () => {
+    if (!newDay.trim()) {
+      alert('Day cannot be empty');
       return;
     }
-    try {
-      const res = await fetch('http://localhost:5174/api/TimeTableapi', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ day: newDay, periods: newPeriods }),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setTimetableData(prev => [...prev, data]);
-        setNewDay('');
-        setNewPeriods(Array(defaultPeriods).fill(''));
-        setMessage('Day added successfully.');
-      } else {
-        setMessage(data.message || 'Failed to add day.');
-      }
-    } catch {
-      setMessage('Server error. Please try again.');
-    }
-  };
 
-  // Edit a period in a day
-  const handleEdit = async (rowIdx, periodIdx, value) => {
-    const day = timetableData[rowIdx].day;
-    const res = await fetch('http://localhost:5174/api/TimeTableapi/period', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ day, periodIdx, value }),
-    });
-    if (res.ok) {
-      setTimetableData(prev =>
-        prev.map((row, i) =>
-          i === rowIdx
-            ? { ...row, periods: row.periods.map((p, j) => (j === periodIdx ? value : p)) }
-            : row
-        )
-      );
-      setMessage('Period updated.');
-    } else {
-      setMessage('Failed to update period.');
+    if (newPeriods.some(p => !p.trim())) {
+      alert('All periods must be filled');
+      return;
     }
-  };
 
-  // Delete a day's row
-  const handleDeleteRow = async (rowIdx) => {
-    const day = timetableData[rowIdx].day;
-    const res = await fetch(`http://localhost:5174/api/TimeTableapi/day/${day}`, {
-      method: 'DELETE',
-    });
-    if (res.ok) {
-      setTimetableData(prev => prev.filter((_, i) => i !== rowIdx));
-      setMessage('Day deleted.');
-    } else {
-      setMessage('Failed to delete day.');
-    }
-  };
+    const newEntry = { day: newDay.trim(), periods: [...newPeriods] };
+    const updated = [...timetableData.filter(d => d.day.toLowerCase() !== newDay.trim().toLowerCase()), newEntry];
 
-  // Delete a period (column) from all days
-  const handleDeletePeriod = async (periodIdx) => {
-    const res = await fetch('http://localhost:5174/api/TimeTableapi/delete-period', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ periodIdx }),
-    });
-    if (res.ok) {
-      setTimetableData(prev =>
-        prev.map(row => ({
-          ...row,
-          periods: row.periods.filter((_, i) => i !== periodIdx)
-        }))
-      );
-      setMessage('Period deleted from all days.');
-    } else {
-      setMessage('Failed to delete period.');
-    }
+    updated.sort((a, b) => dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day));
+
+    setTimetableData(updated);
+    setNewDay('');
+    setNewPeriods(Array(8).fill(''));
   };
 
   return (
-    <div style={{ padding: '40px' }}>
-      <h1 style={{ fontSize: '32px', marginBottom: '20px' }}>Class Timetable</h1>
-      <div style={{ marginBottom: '32px', border: '1px solid #eee', borderRadius: 8, padding: 24 }}>
-        <h2 style={{ fontSize: '22px', marginBottom: 12 }}>Add New Day</h2>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-          <input
-            type="text"
-            placeholder="Day (e.g. Monday)"
-            value={newDay}
-            onChange={e => setNewDay(e.target.value)}
-            style={{ padding: 8, fontSize: 16, borderRadius: 4, border: '1px solid #ccc', minWidth: 120 }}
-          />
-          {newPeriods.map((period, idx) => (
+    <div className="timetable-container">
+      <h1 className="timetable-title">Class Timetable for Staff</h1>
+
+      <div className="input-section">
+        <input
+          type="text"
+          placeholder="Enter Day (e.g., Monday)"
+          value={newDay}
+          onChange={(e) => setNewDay(e.target.value)}
+          className="day-input"
+        />
+        <div className="periods-input">
+          {newPeriods.map((value, index) => (
             <input
-              key={idx}
+              key={index}
               type="text"
-              placeholder={`Period ${idx + 1}`}
-              value={period}
-              onChange={e => {
-                const updated = [...newPeriods];
-                updated[idx] = e.target.value;
-                setNewPeriods(updated);
-              }}
-              style={{ padding: 8, fontSize: 16, borderRadius: 4, border: '1px solid #ccc', minWidth: 100 }}
+              placeholder={`Period ${index + 1}`}
+              value={value}
+              onChange={(e) => handleNewPeriodChange(e.target.value, index)}
+              className="period-input"
             />
           ))}
-          <button
-            onClick={handleAddDay}
-            style={{
-              background: '#007bff',
-              color: '#fff',
-              border: 'none',
-              borderRadius: 4,
-              padding: '8px 18px',
-              fontSize: 16,
-              cursor: 'pointer',
-              marginLeft: 8
-            }}
-          >
-            Add Day
-          </button>
         </div>
+        <Button onClick={handleAddDay} style={{ backgroundColor: '#28a745' }}>
+          Add Day
+        </Button>
       </div>
-      {message && <div style={{ color: '#007bff', marginBottom: 16 }}>{message}</div>}
-      <table style={tableStyle}>
+
+      <table className="timetable-table">
         <thead>
           <tr>
-            <th style={headerStyle}>Day</th>
-            {[...Array(timetableData[0]?.periods.length || defaultPeriods)].map((_, i) => (
-              <th key={i} style={headerStyle}>
-                Period {i + 1}
-                <button
-                  style={{
-                    marginLeft: 8,
-                    background: '#ff4d4f',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    padding: '2px 6px',
-                  }}
-                  onClick={() => handleDeletePeriod(i)}
-                  title="Delete this period"
-                >
-                  ×
-                </button>
-              </th>
+            <th>Day</th>
+            {[...Array(8)].map((_, i) => (
+              <th key={i}>Period {i + 1}</th>
             ))}
-            <th style={headerStyle}>Delete</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {timetableData.map((row, rowIdx) => (
-            <tr key={rowIdx}>
-              <td style={thTdStyle}>{row.day}</td>
-              {row.periods.map((className, periodIdx) => (
-                <td key={periodIdx} style={thTdStyle}>
-                  <input
-                    type="text"
-                    value={className}
-                    style={{
-                      width: '90%',
-                      padding: '4px',
-                      fontSize: '16px',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                      textAlign: 'center',
-                    }}
-                    onChange={e => handleEdit(rowIdx, periodIdx, e.target.value)}
-                  />
-                </td>
-              ))}
-              <td style={thTdStyle}>
-                <button
-                  style={{
-                    background: '#ff4d4f',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    padding: '6px 12px',
-                  }}
-                  onClick={() => handleDeleteRow(rowIdx)}
-                  title="Delete this day"
-                >
+          {timetableData.map((row, index) => (
+            <tr key={index}>
+              <td>{row.day}</td>
+              {editIndex === index
+                ? editedPeriods.map((className, i) => (
+                    <td key={i}>
+                      <input
+                        type="text"
+                        value={className}
+                        onChange={(e) => handleChange(e.target.value, i)}
+                        className="period-input"
+                      />
+                    </td>
+                  ))
+                : row.periods.map((className, i) => <td key={i}>{className}</td>)}
+              <td>
+                {editIndex === index ? (
+                  <Button onClick={() => handleSave(index)} style={{ backgroundColor: 'green' }}>
+                    Save
+                  </Button>
+                ) : (
+                  <Button onClick={() => handleEdit(index)}>Edit</Button>
+                )}
+                <Button onClick={() => handleDelete(index)} style={{ backgroundColor: 'red' }}>
                   Delete
-                </button>
+                </Button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <Button onClick={() => alert('Back to Dashboard')} style={{ marginTop: '40px' }}>
+        Back
+      </Button>
     </div>
   );
 };
