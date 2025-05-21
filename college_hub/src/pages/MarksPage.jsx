@@ -1,10 +1,10 @@
-// ======= frontend/src/pages/MarksPage.jsx =======
 import React, { useEffect, useState } from 'react';
 import MarksForm from '../components/MarksForm';
 import MarksTable from '../components/MarksTable';
 import MarksChart from '../components/MarksChart';
 import { getMarks, addMark, deleteMark } from '../api/Marksapi';
 import '../styles/MarksPage.css';
+
 const MarksPage = () => {
   const studentId = '1234567890';
   const [marks, setMarks] = useState([]);
