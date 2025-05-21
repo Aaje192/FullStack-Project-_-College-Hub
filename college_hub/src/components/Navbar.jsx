@@ -87,7 +87,7 @@ const Navbar = ({ onLogout }) => {
               fontSize: '1.5rem'
             }}
           >
-            KOLLEGE
+            COLLEGE HUB
           </Box>
         </Typography>
 
