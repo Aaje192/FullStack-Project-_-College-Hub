@@ -1,3 +1,134 @@
+
+/* TimeTablePage.css */
+
+.container {
+  padding: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fafafa;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+  font-size: 18px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th, td {
+  border: 2px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: 600;
+  color: #555;
+}
+
+.button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 8px 5px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.button.save {
+  background-color: #28a745;
+}
+
+.button.save:hover {
+  background-color: #1e7e34;
+}
+
+.button.delete {
+  background-color: #dc3545;
+}
+
+.button.delete:hover {
+  background-color: #a71d2a;
+}
+
+.input-section {
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.day-input {
+  padding: 14px 16px;
+  font-size: 18px;
+  width: 300px;
+  border: 1.8px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  outline-offset: 3px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.day-input:hover {
+  border-color: #666;
+}
+
+.day-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px #007bffaa;
+}
+
+.periods-input {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.period-input {
+  padding: 12px 14px;
+  font-size: 16px;
+  border: 1.8px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  outline-offset: 3px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.period-input:hover {
+  border-color: #666;
+}
+
+.period-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px #007bffaa;
+}
+
+.back-button {
+  margin-top: 40px;
+  display: inline-block;
+}
+=======
 .timetable-container {
   max-width: 1000px;
   margin: 40px auto;
@@ -158,3 +289,4 @@
     font-size: 0.97rem;
   }
 }
+
