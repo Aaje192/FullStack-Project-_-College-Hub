@@ -5,8 +5,7 @@ import MarksChart from '../components/MarksChart';
 import { getMarks, addMark, deleteMark } from '../api/Marksapi';
 import '../styles/MarksPage.css';
 
-const MarksPage = () => {
-  const studentId = '1234567890';
+const MarksPage = ({ userId }) => {
   const [marks, setMarks] = useState([]);
   const [filteredMarks, setFilteredMarks] = useState([]);
   const [filterCriteria, setFilterCriteria] = useState('all');
@@ -16,7 +15,7 @@ const MarksPage = () => {
   const reloadMarks = async () => {
     setLoading(true);
     try {
-      const data = await getMarks(studentId);
+      const data = await getMarks(userId);
       setMarks(data);
       setFilteredMarks(data);
     } catch (error) {
@@ -29,7 +28,7 @@ const MarksPage = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const data = await getMarks(studentId);
+        const data = await getMarks(userId);
         setMarks(data);
         setFilteredMarks(data);
         console.log('Fetched marks:', data); // <--- Add here
@@ -73,7 +72,7 @@ const MarksPage = () => {
 
   return (
     <div className="container">
-      <MarksForm onMarkAdded={reloadMarks} />
+      <MarksForm onMarkAdded={reloadMarks} userId={userId} />
       
       <div className="filter-controls">
         <div className="filter-row">

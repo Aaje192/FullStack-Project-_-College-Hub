@@ -12,8 +12,8 @@ const LoginPage = ({ onLogin }) => {
 
   const handleUserTypeSelection = (type) => setUserType(type);
   const handleGoBack = () => setUserType(null);
-  const handleSuccessfulLogin = () => {
-    onLogin();
+  const handleSuccessfulLogin = (userId) => {
+    onLogin(userId);
     navigate('/marks');
   };
 
@@ -72,6 +72,16 @@ const LoginPage = ({ onLogin }) => {
           )}
         </Paper>
       ) : renderUserSelection()}
+      <Box>
+        <Button
+          fullWidth
+          variant="text"
+          sx={{ mt: 1 }}
+          onClick={() => navigate('/register')}
+        >
+          Don't have an account? Register
+        </Button>
+      </Box>
     </Box>
   );
 };

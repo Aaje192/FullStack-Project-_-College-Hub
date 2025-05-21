@@ -7,9 +7,7 @@ import { useTheme } from '@mui/material/styles';
 import { getNotes, addTextNote, addFileNote, deleteNote } from '../api/Noteapi';
 import '../styles/NotesPage.css';
 
-const studentId = "1234567890"; // Hardcoded for now
-
-const NotesPage = () => {
+const NotesPage = ({ userId }) => {
   const theme = useTheme();
 
   // Form state
@@ -33,7 +31,7 @@ const NotesPage = () => {
 
   const fetchNotes = async () => {
     try {
-      const res = await getNotes(studentId);
+      const res = await getNotes(userId);
       setNotesData(res.data);
     } catch (err) {
       setNotesData([]);
@@ -49,7 +47,7 @@ const NotesPage = () => {
     try {
       if (noteType === "text") {
         await addTextNote({
-          studentId,
+          studentId: userId,
           subject,
           chapter,
           type: "text",
@@ -57,7 +55,7 @@ const NotesPage = () => {
         });
       } else if (noteType === "file" && file) {
         const formData = new FormData();
-        formData.append("studentId", studentId);
+        formData.append("studentId", userId);
         formData.append("subject", subject);
         formData.append("chapter", chapter);
         formData.append("type", "file");

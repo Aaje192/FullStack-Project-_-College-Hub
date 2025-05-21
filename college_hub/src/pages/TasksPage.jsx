@@ -17,8 +17,7 @@ import {
   deleteTask,
 } from "../api/Taskapi";
 
-const TasksPage = () => {
-  const studentId = "1234567890"; // Hardcoded studentId
+const TasksPage = ({ userId }) => {
   const [tasks, setTasks] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
@@ -31,11 +30,11 @@ const TasksPage = () => {
   useEffect(() => {
     fetchTasks();
     // eslint-disable-next-line
-  }, []);
+  }, [userId]);
 
   const fetchTasks = async () => {
     try {
-      const res = await getTasks(studentId);
+      const res = await getTasks(userId);
       setTasks(res.data);
     } catch (err) {
       console.error(err);
@@ -53,7 +52,7 @@ const TasksPage = () => {
       if (editingId) {
         await updateTask(editingId, formData);
       } else {
-        await addTask({ ...formData, studentId });
+        await addTask({ ...formData, studentId: userId });
       }
       fetchTasks();
       setFormData({
