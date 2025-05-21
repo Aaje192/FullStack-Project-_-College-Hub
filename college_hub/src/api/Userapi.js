@@ -7,3 +7,6 @@ export const registerUser = (payload) =>
 // Login user (student or staff)
 export const loginUser = (payload) =>
   axios.post("/api/user/login", payload);
+
+export const getProfile = (id) =>
+  axios.get(`/api/user/profile/${id}`);

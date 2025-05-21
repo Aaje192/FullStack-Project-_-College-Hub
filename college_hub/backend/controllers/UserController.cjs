@@ -57,3 +57,26 @@ exports.loginUser = async (req, res) => {
     res.status(500).json({ message: 'Server error.' });
   }
 };
+
+exports.getProfile = async (req, res) => {
+  try {
+    const { id } = req.params; // id can be studentid or staffid
+    const user = await User.findOne({ id });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // You can select only the fields you want to send
+    res.json({
+      name: user.username,
+      id: user.id,
+      email: user.email,
+      mobile: user.mobile,
+      year: user.year,
+      department: user.department,
+      branch: user.branch,
+      course: user.course,
+      userType: user.userType
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};

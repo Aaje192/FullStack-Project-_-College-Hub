@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Paper, Avatar, Grid, Divider } from '@mui/material';
+import { getProfile } from '../api/Userapi';
 
-const mockProfile = {
-  name: 'John Doe',
-  id: 'STU123456',
-  email: 'john.doe@example.com',
-  mobile: '+91 9876543210',
-  year: '3rd Year',
-  department: 'Computer Science',
-  semester: '6',
-  branch: 'Software Engineering',
-};
+const ProfilePage = ({ userId }) => {
+  const [profile, setProfile] = useState(null);
 
-const ProfilePage = () => {
+  useEffect(() => {
+    if (userId) {
+      getProfile(userId)
+        .then(res => setProfile(res.data))
+        .catch(() => setProfile(null));
+    }
+  }, [userId]);
+
+  if (!profile) return <Typography>Loading...</Typography>;
+
   return (
     <Box sx={{ p: 3, maxWidth: 600, mx: 'auto' }}>
       <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'center' }}>
@@ -21,53 +23,71 @@ const ProfilePage = () => {
       <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
           <Avatar sx={{ width: 80, height: 80, mb: 2 }}>
-            {mockProfile.name.split(' ').map(n => n[0]).join('')}
+            {profile.name?.split(' ').map(n => n[0]).join('')}
           </Avatar>
           <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-            {mockProfile.name}
+            {profile.name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {mockProfile.branch}
+            {profile.branch || profile.course || profile.userType}
           </Typography>
         </Box>
         <Divider sx={{ mb: 3 }} />
         <Grid container spacing={2}>
           <Grid item xs={5}>
-            <Typography variant="subtitle2" color="text.secondary">Student ID:</Typography>
+            <Typography variant="subtitle2" color="text.secondary">ID:</Typography>
           </Grid>
           <Grid item xs={7}>
-            <Typography>{mockProfile.id}</Typography>
+            <Typography>{profile.id}</Typography>
           </Grid>
           <Grid item xs={5}>
             <Typography variant="subtitle2" color="text.secondary">Email:</Typography>
           </Grid>
           <Grid item xs={7}>
-            <Typography>{mockProfile.email}</Typography>
+            <Typography>{profile.email}</Typography>
           </Grid>
           <Grid item xs={5}>
             <Typography variant="subtitle2" color="text.secondary">Mobile Number:</Typography>
           </Grid>
           <Grid item xs={7}>
-            <Typography>{mockProfile.mobile}</Typography>
+            <Typography>{profile.mobile}</Typography>
           </Grid>
-          <Grid item xs={5}>
-            <Typography variant="subtitle2" color="text.secondary">Year:</Typography>
-          </Grid>
-          <Grid item xs={7}>
-            <Typography>{mockProfile.year}</Typography>
-          </Grid>
+          {profile.year && (
+            <>
+              <Grid item xs={5}>
+                <Typography variant="subtitle2" color="text.secondary">Year:</Typography>
+              </Grid>
+              <Grid item xs={7}>
+                <Typography>{profile.year}</Typography>
+              </Grid>
+            </>
+          )}
           <Grid item xs={5}>
             <Typography variant="subtitle2" color="text.secondary">Department:</Typography>
           </Grid>
           <Grid item xs={7}>
-            <Typography>{mockProfile.department}</Typography>
+            <Typography>{profile.department}</Typography>
           </Grid>
-          <Grid item xs={5}>
-            <Typography variant="subtitle2" color="text.secondary">Semester:</Typography>
-          </Grid>
-          <Grid item xs={7}>
-            <Typography>{mockProfile.semester}</Typography>
-          </Grid>
+          {profile.branch && (
+            <>
+              <Grid item xs={5}>
+                <Typography variant="subtitle2" color="text.secondary">Branch:</Typography>
+              </Grid>
+              <Grid item xs={7}>
+                <Typography>{profile.branch}</Typography>
+              </Grid>
+            </>
+          )}
+          {profile.course && (
+            <>
+              <Grid item xs={5}>
+                <Typography variant="subtitle2" color="text.secondary">Course:</Typography>
+              </Grid>
+              <Grid item xs={7}>
+                <Typography>{profile.course}</Typography>
+              </Grid>
+            </>
+          )}
         </Grid>
       </Paper>
     </Box>

@@ -3,6 +3,7 @@ import { getTimetable, addDay, updatePeriod, deleteDay } from "../api/TimeTablea
 import "../styles/TimeTablePage.css";
 
 const defaultPeriods = 8;
+const defaultDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function TimetablePage({ userId }) {
   const [timetableData, setTimetableData] = useState([]);
