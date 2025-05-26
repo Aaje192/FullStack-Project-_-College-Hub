@@ -10,7 +10,9 @@ const userSchema = new mongoose.Schema({
   year: { type: String },    // Only for students
   branch: { type: String },  // Only for students
   course: { type: String },  // Only for students
-  mobile: { type: String, required: true }
+  mobile: { type: String, required: true },
+  resetToken: { type: String },
+  resetTokenExpiry: { type: Date }
 });
 
 module.exports = mongoose.model('User', userSchema);

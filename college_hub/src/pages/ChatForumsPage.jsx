@@ -1,118 +1,203 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  Box, 
+  Paper, 
+  Typography, 
+  TextField, 
+  Button, 
+  List, 
+  ListItem, 
+  ListItemText,
+  Avatar,
+  Divider
+} from '@mui/material';
+import { Send } from '@mui/icons-material';
+import { getAllMessages, sendMessage } from '../api/ChatForumApi';
 
-const ChatForumsPage = () => {
+const ChatForumsPage = ({ userId }) => {
   const [messages, setMessages] = useState([]);
-  const [topic, setTopic] = useState('');
-  const [user, setUser] = useState('');
   const [newMessage, setNewMessage] = useState('');
-  const [reply, setReply] = useState({});
-  const [info, setInfo] = useState('');
+  const [error, setError] = useState('');
+  const messagesEndRef = useRef(null);
+  const pollInterval = useRef(null);
 
-  // Fetch all messages for the selected topic
-  useEffect(() => {
-    if (topic) {
-      fetch(`http://localhost:5174/api/chat?topic=${topic}`)
-        .then(res => res.json())
-        .then(data => setMessages(data))
-        .catch(() => setMessages([]));
-    } else {
-      setMessages([]);
-    }
-  }, [topic]);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-  // Post a new message
-  const handlePost = async () => {
-    if (!topic.trim() || !newMessage.trim()) {
-      setInfo('Please enter a topic and message.');
-      return;
-    }
-    const res = await fetch('http://localhost:5174/api/ChatForumapi', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ topic, user: user || 'Anonymous', text: newMessage }),
-    });
-    if (res.ok) {
-      const msg = await res.json();
-      setMessages(prev => [...prev, msg]);
-      setNewMessage('');
-      setInfo('Message posted.');
-    } else {
-      setInfo('Failed to post message.');
+  const fetchMessages = async () => {
+    try {
+      const fetchedMessages = await getAllMessages();
+      setMessages(fetchedMessages);
+      scrollToBottom();
+    } catch (err) {
+      setError('Failed to load messages');
+      console.error(err);
     }
   };
 
-  // Post a reply to a message
-  const handleReply = async (parentId) => {
-    if (!reply[parentId] || !reply[parentId].trim()) return;
-    const res = await fetch(`http://localhost:5174/api/chat/${parentId}/reply`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user: user || 'Anonymous', text: reply[parentId] }),
-    });
-    if (res.ok) {
-      const updated = await res.json();
-      setMessages(msgs =>
-        msgs.map(m => (m._id === parentId ? updated : m))
-      );
-      setReply(r => ({ ...r, [parentId]: '' }));
+  useEffect(() => {
+    fetchMessages();
+    // Set up polling for new messages every 3 seconds
+    pollInterval.current = setInterval(fetchMessages, 3000);
+
+    return () => {
+      if (pollInterval.current) {
+        clearInterval(pollInterval.current);
+      }
+    };
+  }, []);
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (!newMessage.trim()) return;
+
+    try {
+      await sendMessage({
+        senderId: userId,
+        message: newMessage.trim()
+      });
+      setNewMessage('');
+      await fetchMessages();
+    } catch (err) {
+      setError('Failed to send message');
+      console.error(err);
     }
+  };
+
+  const formatTimestamp = (timestamp) => {
+    return new Date(timestamp).toLocaleString();
   };
 
   return (
-    <div style={{ padding: 24 }}>
-      <h2>Chat Forum</h2>
-      <div style={{ marginBottom: 16 }}>
-        <input
-          type="text"
-          placeholder="Topic"
-          value={topic}
-          onChange={e => setTopic(e.target.value)}
-          style={{ marginRight: 8, padding: 6, borderRadius: 4, border: '1px solid #ccc' }}
-        />
-        <input
-          type="text"
-          placeholder="Your name (optional)"
-          value={user}
-          onChange={e => setUser(e.target.value)}
-          style={{ marginRight: 8, padding: 6, borderRadius: 4, border: '1px solid #ccc' }}
-        />
-        <input
-          type="text"
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', p: 2 }}>
+      <Typography variant="h4" gutterBottom>
+        Student Chat Forum
+      </Typography>
+      
+      {error && (
+        <Typography color="error" sx={{ mb: 2 }}>
+          {error}
+        </Typography>
+      )}
+
+      <Paper 
+        elevation={3} 
+        sx={{ 
+          flex: 1, 
+          mb: 2, 
+          overflow: 'auto',
+          maxHeight: 'calc(100vh - 250px)',
+          p: 2,
+          bgcolor: '#f5f5f5'
+        }}
+      >
+        <List>
+          {messages.map((msg, index) => (
+            <React.Fragment key={msg._id || index}>
+              <ListItem 
+                alignItems="flex-start"
+                sx={{
+                  flexDirection: msg.senderId === userId ? 'row-reverse' : 'row',
+                }}
+              >
+                <Avatar 
+                  sx={{ 
+                    bgcolor: msg.senderId === userId ? '#4a4a4a' : '#757575',
+                    mr: msg.senderId === userId ? 0 : 2,
+                    ml: msg.senderId === userId ? 2 : 0
+                  }}
+                >
+                  {msg.senderName[0].toUpperCase()}
+                </Avatar>
+                <ListItemText
+                  primary={
+                    <Typography
+                      component="span"
+                      variant="body1"
+                      sx={{ 
+                        display: 'flex', 
+                        flexDirection: 'column',
+                        alignItems: msg.senderId === userId ? 'flex-end' : 'flex-start'
+                      }}
+                    >
+                      {msg.senderName}
+                      <Typography variant="caption" color="text.secondary">
+                        {formatTimestamp(msg.timestamp)}
+                      </Typography>
+                    </Typography>
+                  }
+                  secondary={
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      sx={{
+                        display: 'inline-block',
+                        bgcolor: msg.senderId === userId ? '#e0e0e0' : '#ffffff',
+                        p: 1,
+                        borderRadius: 1,
+                        maxWidth: '80%',
+                        wordBreak: 'break-word'
+                      }}
+                    >
+                      {msg.message}
+                    </Typography>
+                  }
+                  sx={{
+                    textAlign: msg.senderId === userId ? 'right' : 'left',
+                  }}
+                />
+              </ListItem>
+              {index < messages.length - 1 && <Divider variant="middle" sx={{ bgcolor: '#e0e0e0' }} />}
+            </React.Fragment>
+          ))}
+          <div ref={messagesEndRef} />
+        </List>
+      </Paper>
+
+      <Paper 
+        component="form" 
+        onSubmit={handleSendMessage}
+        sx={{ 
+          p: 2, 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 2,
+          bgcolor: '#f5f5f5'
+        }}
+      >
+        <TextField
+          fullWidth
+          variant="outlined"
           placeholder="Type your message..."
           value={newMessage}
-          onChange={e => setNewMessage(e.target.value)}
-          style={{ width: 300, marginRight: 8, padding: 6, borderRadius: 4, border: '1px solid #ccc' }}
+          onChange={(e) => setNewMessage(e.target.value)}
+          size="small"
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              bgcolor: '#ffffff'
+            }
+          }}
         />
-        <button type="button" onClick={handlePost} style={{ padding: '6px 16px' }}>
-          Post
-        </button>
-        {info && <span style={{ marginLeft: 12, color: '#007bff' }}>{info}</span>}
-      </div>
-      <div>
-        {messages.map(msg => (
-          <div key={msg._id} style={{ marginBottom: 18, padding: 12, border: '1px solid #eee', borderRadius: 6 }}>
-            <b>{msg.user}:</b> {msg.text}
-            <div style={{ marginLeft: 16, marginTop: 8 }}>
-              {msg.replies && msg.replies.map(rep => (
-                <div key={rep._id} style={{ marginBottom: 6 }}>
-                  <span style={{ color: '#555' }}><b>{rep.user}:</b> {rep.text}</span>
-                </div>
-              ))}
-              <input
-                type="text"
-                placeholder="Reply..."
-                value={reply[msg._id] || ''}
-                onChange={e => setReply(r => ({ ...r, [msg._id]: e.target.value }))}
-                style={{ width: 200, marginRight: 8, padding: 4, borderRadius: 4, border: '1px solid #ccc' }}
-              />
-              <button type="button" onClick={() => handleReply(msg._id)} style={{ padding: '4px 12px' }}>
-                Reply
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+        <Button
+          type="submit"
+          variant="contained"
+          endIcon={<Send />}
+          disabled={!newMessage.trim()}
+          sx={{
+            bgcolor: '#4a4a4a',
+            '&:hover': {
+              bgcolor: '#333333'
+            },
+            '&:disabled': {
+              bgcolor: '#cccccc'
+            }
+          }}
+        >
+          Send
+        </Button>
+      </Paper>
+    </Box>
   );
 };
 

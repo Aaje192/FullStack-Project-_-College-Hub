@@ -4,6 +4,7 @@ import MarksTable from '../components/MarksTable';
 import MarksChart from '../components/MarksChart';
 import { getMarks, addMark, deleteMark } from '../api/Marksapi';
 import '../styles/MarksPage.css';
+import { Typography } from '@mui/material';
 
 const MarksPage = ({ userId }) => {
   const [marks, setMarks] = useState([]);
@@ -72,12 +73,15 @@ const MarksPage = ({ userId }) => {
 
   return (
     <div className="container">
+      <Typography variant="h4" gutterBottom sx={{ mb: 4, fontWeight: "bold", textAlign: "center" }}>
+        Marks
+      </Typography>
       <MarksForm onMarkAdded={reloadMarks} userId={userId} />
       
       <div className="filter-controls">
         <div className="filter-row">
           <div className="filter-group">
-            <label>Filter By:</label>
+            <label>filter by:</label>
             <select
               value={filterCriteria}
               onChange={(e) => {

@@ -158,3 +158,54 @@
     font-size: 0.97rem;
   }
 }
+
+/* TimeTablePage.css */
+.MuiTableCell-root {
+  padding: 12px 16px !important;
+}
+
+/* Custom scrollbar for better UX */
+.MuiTableContainer-root {
+  &::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: #666;
+  }
+}
+
+/* Period cell hover effect */
+.period-cell {
+  transition: all 0.2s ease;
+}
+
+.period-cell:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Responsive adjustments */
+@media (max-width: 960px) {
+  .MuiTableCell-root {
+    padding: 8px 12px !important;
+  }
+  
+  .MuiTypography-subtitle2 {
+    font-size: 0.8rem !important;
+  }
+  
+  .MuiTypography-caption {
+    font-size: 0.7rem !important;
+  }
+}

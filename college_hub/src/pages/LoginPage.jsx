@@ -35,14 +35,14 @@ const LoginPage = ({ onLogin }) => {
           variant="contained"
           startIcon={<School />}
           onClick={() => handleUserTypeSelection('student')}
-          sx={{ py: 1.5, backgroundColor: '#2e7d32', '&:hover': { backgroundColor: '#1b5e20' } }}
+          sx={{ py: 1.5, backgroundColor: '#1976d2', '&:hover': { backgroundColor: '#1565c0' } }}
         >
           Student Login
         </Button>
       </Box>
       <Typography variant="body2" sx={{ mt: 3 }}>
         <Button 
-          color="primary" 
+          color="inherit" 
           size="small" 
           onClick={() => navigate('/register')}
           sx={{ textTransform: 'none' }}
@@ -76,7 +76,7 @@ const LoginPage = ({ onLogin }) => {
         <Button
           fullWidth
           variant="text"
-          sx={{ mt: 1 }}
+          sx={{ mt: 1, color: '#1976d2' }}
           onClick={() => navigate('/register')}
         >
           Don't have an account? Register

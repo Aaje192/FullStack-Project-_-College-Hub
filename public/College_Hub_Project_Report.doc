@@ -1,0 +1,1116 @@
+                                    COLLEGE HUB - PROJECT REPORT
+                                    ===========================
+
+Table of Contents
+----------------
+1. Project Overview
+2. Team Structure and Responsibilities
+3. Technical Architecture
+4. Detailed Module Description
+5. Implementation Details
+6. Security Features
+7. Testing and Quality Assurance
+8. Future Scope
+9. Conclusion
+
+1. Project Overview
+------------------
+College Hub is an innovative full-stack web application designed to revolutionize academic management in higher education institutions. The project addresses various challenges faced by students, faculty, and administrators by providing a centralized platform for academic activities, communication, and resource management.
+
+1.1 Project Objectives
+---------------------
+- Streamline academic processes and reduce administrative overhead
+- Enhance communication between students and faculty
+- Provide real-time access to academic resources and information
+- Improve tracking and management of academic performance
+- Create a user-friendly interface for all stakeholders
+
+1.2 Target Users
+---------------
+- Students
+- Faculty Members
+- Administrative Staff
+- Department Heads
+- Institution Management
+
+2. Team Structure and Responsibilities
+-----------------------------------
+2.1 Team Organization
+--------------------
+The project follows a module-based development approach with clear responsibility distribution:
+
+Team Member: @Adithya-b-03
+Roles: 
+- Authentication System Development
+- Task Management System
+Sample Code (Authentication Module):
+```javascript
+// Authentication Controller
+const authController = {
+    login: async (req, res) => {
+        try {
+            const { email, password } = req.body;
+            const user = await User.findOne({ email });
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return res.status(400).json({ message: "Invalid credentials" });
+            }
+            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+            res.json({ token, user: { id: user._id, name: user.name, role: user.role } });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+};
+```
+
+Team Member: @Aaje192
+Roles:
+- Student Management System
+- Chat Forum Implementation
+Sample Code (Chat Forum):
+```javascript
+// Chat Room Component
+const ChatRoom = () => {
+    const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState('');
+
+    const sendMessage = async () => {
+        try {
+            await axios.post('/api/messages', {
+                content: newMessage,
+                roomId: currentRoom,
+                sender: currentUser.id
+            });
+            setNewMessage('');
+            fetchMessages();
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    };
+
+    return (
+        <div className="chat-container">
+            <div className="message-list">
+                {messages.map(msg => (
+                    <MessageItem key={msg._id} message={msg} />
+                ))}
+            </div>
+            <div className="message-input">
+                <input 
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    placeholder="Type your message..."
+                />
+                <button onClick={sendMessage}>Send</button>
+            </div>
+        </div>
+    );
+};
+```
+
+Team Member: @Lokesh-1511
+Roles:
+- Academic Performance Tracking
+- Digital Notes Management
+Sample Code (Marks Management):
+```javascript
+// Marks Management System
+const MarksSchema = new mongoose.Schema({
+    student: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Student',
+        required: true
+    },
+    subject: {
+        type: String,
+        required: true
+    },
+    marks: {
+        internal: Number,
+        external: Number,
+        total: Number
+    },
+    semester: Number,
+    academicYear: String,
+    lastUpdated: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+// API Endpoint for Marks Entry
+router.post('/marks/entry', auth, async (req, res) => {
+    try {
+        const { studentId, subject, marks, semester } = req.body;
+        const newMarks = new Marks({
+            student: studentId,
+            subject,
+            marks,
+            semester
+        });
+        await newMarks.save();
+        res.status(201).json(newMarks);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+```
+
+Team Member: @KishorM28
+Roles:
+- Timetable Management
+- Attendance Tracking
+Sample Code (Attendance System):
+```javascript
+// Attendance Tracking Component
+const AttendanceTracker = () => {
+    const [attendance, setAttendance] = useState({});
+    const [students, setStudents] = useState([]);
+    
+    const markAttendance = async (studentId, status) => {
+        try {
+            const response = await axios.post('/api/attendance', {
+                studentId,
+                status,
+                date: new Date(),
+                subject: currentSubject
+            });
+            updateAttendanceState(response.data);
+        } catch (error) {
+            console.error('Error marking attendance:', error);
+        }
+    };
+
+    return (
+        <div className="attendance-container">
+            <h2>Attendance Sheet - {currentDate}</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Roll Number</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {students.map(student => (
+                        <AttendanceRow 
+                            key={student._id}
+                            student={student}
+                            onMarkAttendance={markAttendance}
+                        />
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+};
+```
+
+3. Technical Architecture
+------------------------
+3.1 Frontend Architecture
+------------------------
+The frontend is built using React with a component-based architecture:
+
+Directory Structure:
+```
+src/
+├── components/
+│   ├── auth/
+│   ├── dashboard/
+│   ├── students/
+│   ├── attendance/
+│   └── common/
+├── pages/
+├── services/
+├── utils/
+└── App.js
+```
+
+3.2 Backend Architecture
+-----------------------
+Node.js and Express.js based REST API architecture:
+
+```
+backend/
+├── controllers/
+├── models/
+├── routes/
+├── middleware/
+├── config/
+└── server.js
+```
+
+3.3 Database Schema
+------------------
+MongoDB schemas for major entities:
+
+```javascript
+// Student Schema
+const StudentSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    rollNumber: { type: String, required: true, unique: true },
+    department: { type: String, required: true },
+    batch: { type: String, required: true },
+    attendance: [{
+        subject: String,
+        present: Number,
+        total: Number
+    }],
+    marks: [{
+        subject: String,
+        score: Number,
+        maxScore: Number
+    }]
+});
+```
+
+4. Detailed Module Description
+----------------------------
+4.1 Authentication System
+------------------------
+The authentication system implements a robust security framework using JSON Web Tokens (JWT) and follows industry-standard security practices:
+
+a) JWT-based Authentication:
+   - Stateless authentication using signed tokens
+   - Token structure: Header.Payload.Signature
+   - Configurable token expiration
+   - Refresh token mechanism for seamless user experience
+   - Secure token storage in HTTP-only cookies
+
+b) Role-based Access Control (RBAC):
+   - Hierarchical role structure:
+     * Super Admin: Complete system access
+     * Admin: Institution-wide management
+     * Faculty: Department and course management
+     * Student: Limited access to personal and course data
+   - Permission inheritance
+   - Dynamic role assignment
+   - Fine-grained access control at feature level
+
+c) Password Security:
+   - Bcrypt hashing with salt rounds
+   - Password complexity requirements:
+     * Minimum 8 characters
+     * Mix of uppercase and lowercase
+     * Special characters
+     * Numbers
+   - Password history tracking
+   - Brute force protection
+   - Account lockout after failed attempts
+
+d) Session Management:
+   - Concurrent session handling
+   - Session timeout configuration
+   - Device tracking and management
+   - Forced logout capability
+   - Session activity logging
+
+4.2 Student Management System
+---------------------------
+A comprehensive system for managing student lifecycle:
+
+a) Student Registration:
+   - Multi-step registration process
+   - Document verification workflow
+   - Batch allocation system
+   - Parent/Guardian information
+   - Medical and emergency contact details
+   - Previous academic records
+   - Digital document storage
+
+b) Profile Management:
+   - Dynamic profile fields
+   - Academic progress tracking
+   - Attendance statistics
+   - Performance metrics
+   - Extra-curricular activities
+   - Achievement records
+   - Disciplinary records
+
+c) Batch Organization:
+   - Automatic batch creation
+   - Class division management
+   - Subject allocation
+   - Faculty assignment
+   - Timetable integration
+   - Batch transfer system
+
+4.3 Academic Management System
+----------------------------
+Comprehensive academic tracking and management:
+
+a) Course Management:
+   - Curriculum design tools
+   - Course material organization
+   - Learning objective tracking
+   - Resource allocation
+   - Prerequisites management
+   - Credit system implementation
+
+b) Assignment System:
+   - Assignment creation workflow
+   - Submission tracking
+   - Plagiarism detection
+   - Automated reminder system
+   - Feedback mechanism
+   - Grade integration
+   - Late submission handling
+
+c) Performance Analytics:
+   - Individual performance tracking
+   - Batch-wise analysis
+   - Subject-wise performance
+   - Trend analysis
+   - Predictive performance indicators
+   - Custom report generation
+   - Performance improvement suggestions
+
+d) Digital Notes Management:
+   - Structured note organization
+   - Version control for updates
+   - Multimedia content support
+   - Collaborative editing
+   - Search functionality
+   - Access control
+   - Offline access capability
+
+4.4 Communication System
+-----------------------
+Advanced communication features for effective collaboration:
+
+a) Real-time Chat System:
+   - Individual and group chats
+   - File sharing capability
+   - Message encryption
+   - Read receipts
+   - Online status indicators
+   - Chat history management
+   - Message search functionality
+
+b) Announcement System:
+   - Priority-based notifications
+   - Target audience selection
+   - Scheduled announcements
+   - Delivery confirmation
+   - Template management
+   - Multi-channel distribution
+   - Analytics and tracking
+
+c) Discussion Forums:
+   - Topic-based organization
+   - Moderation tools
+   - Rating system
+   - Best answer selection
+   - Tag-based categorization
+   - Search functionality
+   - Activity tracking
+
+d) Document Sharing:
+   - Version control
+   - Access permissions
+   - File type restrictions
+   - Storage management
+   - Preview capability
+   - Collaborative editing
+   - Audit logging
+
+4.5 Attendance Management
+------------------------
+Comprehensive attendance tracking system:
+
+a) Recording Methods:
+   - Manual entry
+   - QR code-based
+   - Biometric integration
+   - Mobile app support
+   - Bulk upload facility
+   - Real-time synchronization
+
+b) Analytics and Reporting:
+   - Daily attendance reports
+   - Monthly statistics
+   - Subject-wise attendance
+   - Shortage identification
+   - Automatic notification
+   - Custom report generation
+   - Trend analysis
+
+c) Policy Management:
+   - Attendance criteria setup
+   - Leave management
+   - Medical absence tracking
+   - Attendance shortage warnings
+   - Automatic calculations
+   - Policy enforcement
+   - Exception handling
+
+4.6 Timetable Management
+-----------------------
+Intelligent scheduling system:
+
+a) Schedule Creation:
+   - Automated scheduling
+   - Conflict detection
+   - Resource allocation
+   - Faculty availability check
+   - Room allocation
+   - Special event handling
+   - Schedule optimization
+
+b) Management Features:
+   - Change notification system
+   - Substitute arrangement
+   - Holiday calendar integration
+   - Event scheduling
+   - Room booking system
+   - Schedule export options
+   - Mobile synchronization
+
+5. Implementation Details
+------------------------
+5.1 Frontend Implementation
+--------------------------
+The frontend architecture implements modern web development practices:
+
+a) State Management:
+   - React Hooks implementation
+   - Context API usage
+   - Redux for complex state
+   - Local storage integration
+   - State persistence
+   - Performance optimization
+
+b) UI/UX Design:
+   - Material-UI framework
+   - Responsive layouts
+   - Accessibility compliance
+   - Theme customization
+   - Animation effects
+   - Progressive loading
+   - Error boundaries
+
+c) Performance Optimization:
+   - Code splitting
+   - Lazy loading
+   - Image optimization
+   - Caching strategies
+   - Bundle size optimization
+   - Performance monitoring
+   - Load time optimization
+
+5.2 Backend Implementation
+-------------------------
+The backend architecture follows modern development practices and patterns:
+
+a) API Architecture:
+   - RESTful design principles
+   - GraphQL integration for complex queries
+   - Microservices architecture
+   - API versioning
+   - Rate limiting
+   - Request validation
+   - Response formatting
+
+b) Database Operations:
+   - Connection pooling
+   - Query optimization
+   - Indexing strategies
+   - Data normalization
+   - Caching implementation
+   - Backup strategies
+   - Data migration tools
+
+c) File Management:
+   - Cloud storage integration
+   - File type validation
+   - Size limit enforcement
+   - Virus scanning
+   - Metadata extraction
+   - Thumbnail generation
+   - Cleanup routines
+
+d) Email System:
+   - Template management
+   - Queue implementation
+   - Delivery tracking
+   - Bounce handling
+   - Spam prevention
+   - HTML email support
+   - Attachment handling
+
+e) Background Processing:
+   - Job queuing system
+   - Scheduled tasks
+   - Error handling
+   - Retry mechanisms
+   - Progress tracking
+   - Resource management
+   - Monitoring tools
+
+6. Security Features
+-------------------
+6.1 Authentication Security
+--------------------------
+a) JWT Implementation:
+   - Token encryption
+   - Signature verification
+   - Expiration handling
+   - Refresh token rotation
+   - Blacklisting mechanism
+   - Token storage security
+   - Cross-site request forgery protection
+
+b) Password Security:
+   - Salted hashing
+   - Password strength enforcement
+   - History tracking
+   - Reset mechanisms
+   - Recovery options
+   - Two-factor authentication
+   - Biometric authentication support
+
+6.2 Data Security
+----------------
+a) Input Validation:
+   - Data sanitization
+   - Type checking
+   - Range validation
+   - Format verification
+   - SQL injection prevention
+   - XSS protection
+   - CSRF protection
+
+b) Access Control:
+   - Role-based permissions
+   - IP whitelisting
+   - Rate limiting
+   - Session management
+   - Audit logging
+   - Access monitoring
+   - Intrusion detection
+
+6.3 Network Security
+-------------------
+a) CORS Configuration:
+   - Origin validation
+   - Method restrictions
+   - Header control
+   - Credential handling
+   - Preflight requests
+   - Error handling
+   - Security headers
+
+b) SSL/TLS Implementation:
+   - Certificate management
+   - Protocol version control
+   - Cipher suite configuration
+   - Perfect forward secrecy
+   - HSTS implementation
+   - Mixed content prevention
+   - Certificate pinning
+
+6.4 Data Protection
+------------------
+a) Encryption:
+   - At-rest encryption
+   - In-transit encryption
+   - End-to-end encryption
+   - Key management
+   - Algorithm selection
+   - Rotation policies
+   - Backup encryption
+
+b) Compliance:
+   - GDPR compliance
+   - Data privacy laws
+   - Data retention policies
+   - User consent management
+   - Right to be forgotten
+   - Data portability
+   - Privacy impact assessment
+
+7. Testing and Quality Assurance
+------------------------------
+7.1 Testing Methodologies
+------------------------
+a) Unit Testing:
+   - Jest test framework
+   - Component testing
+   - Function testing
+   - Mock implementations
+   - Code coverage analysis
+   - Snapshot testing
+   - Performance testing
+
+b) Integration Testing:
+   - API endpoint testing
+   - Database integration
+   - Service integration
+   - Authentication flow
+   - Error handling
+   - Cross-module functionality
+   - End-to-end workflows
+
+c) User Acceptance Testing:
+   - Feature verification
+   - Usability testing
+   - Cross-browser testing
+   - Mobile responsiveness
+   - Performance benchmarking
+   - Load testing
+   - Stress testing
+
+d) Security Testing:
+   - Vulnerability scanning
+   - Penetration testing
+   - Security audit
+   - Code review
+   - Dependency checking
+   - Authentication testing
+   - Authorization testing
+
+7.2 Quality Assurance
+--------------------
+a) Code Quality:
+   - ESLint configuration
+   - Prettier formatting
+   - Code review process
+   - Best practices enforcement
+   - Documentation standards
+   - Type checking
+   - Code complexity analysis
+
+b) Development Process:
+   - Git workflow
+   - Branch management
+   - Code review guidelines
+   - Continuous integration
+   - Automated deployment
+   - Version control
+   - Release management
+
+c) Documentation:
+   - API documentation
+   - Code comments
+   - User guides
+   - System architecture
+   - Deployment guides
+   - Troubleshooting guides
+   - Change logs
+
+8. Future Scope
+--------------
+8.1 Technical Enhancements
+-------------------------
+a) Mobile Development:
+   - Native mobile applications
+   - Cross-platform compatibility
+   - Offline functionality
+   - Push notifications
+   - Biometric authentication
+   - Location services
+   - Mobile-optimized UI
+
+b) Analytics Dashboard:
+   - Real-time analytics
+   - Predictive analytics
+   - Custom reporting
+   - Data visualization
+   - Export capabilities
+   - Trend analysis
+   - Performance metrics
+
+c) AI Integration:
+   - Automated grading
+   - Plagiarism detection
+   - Content recommendations
+   - Chatbot assistance
+   - Predictive analysis
+   - Pattern recognition
+   - Natural language processing
+
+8.2 Feature Enhancements
+-----------------------
+a) Learning Management:
+   - Virtual classrooms
+   - Interactive content
+   - Assessment tools
+   - Progress tracking
+   - Resource library
+   - Certification system
+   - Skill mapping
+
+b) Communication:
+   - Video conferencing
+   - Webinar support
+   - Live streaming
+   - Social networking
+   - Parent portal
+   - Alumni network
+   - Community forums
+
+8.3 Scalability Implementation
+----------------------------
+a) Infrastructure:
+   - Load balancing
+   - Auto-scaling
+   - CDN integration
+   - Database sharding
+   - Caching layers
+   - Backup systems
+   - Disaster recovery
+
+b) Performance:
+   - Response time optimization
+   - Resource optimization
+   - Database optimization
+   - Memory management
+   - Network optimization
+   - Cache strategy
+   - Query optimization
+
+8.4 Integration Capabilities
+--------------------------
+a) Third-party Services:
+   - Payment gateways
+   - Cloud services
+   - Analytics tools
+   - Email services
+   - SMS gateways
+   - Social media
+   - External APIs
+
+b) Academic Tools:
+   - Library management
+   - Research databases
+   - E-learning platforms
+   - Assessment tools
+   - Plagiarism checkers
+   - Citation tools
+   - Academic repositories
+
+9. Conclusion
+-------------
+College Hub represents a significant advancement in educational institution management, successfully implementing a comprehensive solution that addresses various aspects of academic administration. The project demonstrates:
+
+a) Technical Excellence:
+   - Modern architecture
+   - Scalable design
+   - Security focus
+   - Performance optimization
+   - Quality assurance
+   - Best practices
+   - Future readiness
+
+b) Educational Impact:
+   - Improved efficiency
+   - Enhanced communication
+   - Better resource management
+   - Data-driven decisions
+   - Streamlined processes
+   - Enhanced learning experience
+   - Stakeholder satisfaction
+
+The modular architecture ensures easy maintenance and scalability, while the use of modern technologies provides a robust foundation for future enhancements. The project showcases effective team collaboration and proper implementation of software engineering principles, setting a new standard for educational management systems.
+
+-------------------
+End of Report
+------------------- 
+
+.notes-page-root {
+  min-height: 100vh;
+  background: var(--bg-main, #f5f7fa);
+  padding: 32px 16px;
+  transition: all 0.3s ease;
+  color: var(--text-main, #222);
+  box-sizing: border-box;
+}
+
+.notes-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 32px;
+}
+
+.notes-form-section,
+.notes-display-section {
+  background: var(--bg-card, #fff);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  padding: 32px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 180px);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.notes-form-section:hover,
+.notes-display-section:hover {
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.notes-form-section h5,
+.notes-display-section h5 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1976d2;
+  margin-bottom: 24px;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.notes-form-section h5::after,
+.notes-display-section h5::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: #1976d2;
+  border-radius: 2px;
+}
+
+.notes-form-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 16px;
+}
+
+.notes-form-section form::-webkit-scrollbar {
+  width: 8px;
+}
+
+.notes-form-section form::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.notes-form-section form::-webkit-scrollbar-thumb {
+  background: #1976d2;
+  border-radius: 4px;
+}
+
+.subject-card {
+  background: #fff;
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: 2px solid transparent;
+  overflow: hidden;
+  position: relative;
+}
+
+.subject-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, #e3f2fd, #bbdefb);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.subject-card .MuiCardContent-root {
+  position: relative;
+  z-index: 1;
+}
+
+.subject-card:hover::before,
+.subject-card.selected::before {
+  opacity: 1;
+}
+
+.subject-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(25, 118, 210, 0.15);
+  border-color: #1976d2;
+}
+
+.subject-card.selected {
+  border-color: #1976d2;
+  box-shadow: 0 12px 32px rgba(25, 118, 210, 0.2);
+}
+
+.subject-card h6 {
+  font-weight: 600;
+  color: #1976d2;
+  font-size: 1.1rem;
+  text-align: center;
+  margin: 0;
+}
+
+.chapter-list {
+  margin-top: 24px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.chapter-list .MuiListItemButton-root {
+  padding: 12px 20px;
+  transition: all 0.3s ease;
+}
+
+.chapter-list .MuiListItemButton-root:hover,
+.chapter-list .MuiListItemButton-root.selected {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.notes-list {
+  margin-top: 24px;
+}
+
+.notes-list .MuiListItem-root {
+  margin-bottom: 16px;
+  padding: 0;
+}
+
+.notes-list .text-note {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.notes-list .text-note:hover {
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: #1976d2;
+}
+
+.notes-list .file-note {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.notes-list .file-button {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 12px;
+  text-transform: none;
+  font-weight: 500;
+  border: 2px solid #1976d2;
+  color: #1976d2;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+
+.notes-list .file-button:hover {
+  background: #e3f2fd;
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.15);
+}
+
+.delete-button {
+  min-width: unset !important;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px !important;
+  padding: 0 !important;
+}
+
+.success-message {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #4caf50;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 960px) {
+  .notes-page-root {
+    padding: 16px 12px;
+  }
+
+  .notes-grid {
+    gap: 16px;
+  }
+
+  .notes-form-section,
+  .notes-display-section {
+    height: auto;
+    min-height: 500px;
+    padding: 24px 16px;
+    border-radius: 20px;
+  }
+
+  .notes-form-section h5,
+  .notes-display-section h5 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .subject-card h6 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .notes-page-root {
+    padding: 12px 8px;
+  }
+
+  .notes-grid {
+    gap: 12px;
+  }
+
+  .notes-form-section,
+  .notes-display-section {
+    padding: 20px 12px;
+    border-radius: 16px;
+  }
+
+  .subject-card {
+    border-radius: 12px;
+  }
+
+  .chapter-list .MuiListItemButton-root {
+    padding: 8px 16px;
+  }
+
+  .notes-list .text-note {
+    padding: 12px;
+  }
+
+  .notes-list .file-button {
+    padding: 8px 16px;
+  }
+} 

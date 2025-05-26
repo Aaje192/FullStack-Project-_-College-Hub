@@ -1,50 +1,23 @@
-const express = require('express');
-const router = express.Router();
-const ChatForum = require('../models/ChatForumModel');
+import axios from 'axios';
 
-// Get all messages (optionally by topic)
-router.get('/', async (req, res) => {
+// Get all chat messages
+export const getAllMessages = async () => {
   try {
-    const { topic } = req.query;
-    const filter = topic ? { topic } : {};
-    const messages = await ChatForum.find(filter);
-    res.json(messages);
-  } catch (err) {
-    res.status(500).json({ message: 'Server error.' });
+    const response = await axios.get('/api/chat/messages');
+    return response.data;
+  } catch (error) {
+    console.error('Get messages error:', error.response || error);
+    throw error;
   }
-});
+};
 
-// Post a new message
-router.post('/', async (req, res) => {
+// Send a new message
+export const sendMessage = async (payload) => {
   try {
-    const { topic, user, text } = req.body;
-    if (!topic || !text) {
-      return res.status(400).json({ message: 'Topic and message text are required.' });
-    }
-    const message = new ChatForum({ topic, user: user || 'Anonymous', text });
-    await message.save();
-    res.status(201).json(message);
-  } catch (err) {
-    res.status(500).json({ message: 'Server error.' });
+    const response = await axios.post('/api/chat/messages', payload);
+    return response.data;
+  } catch (error) {
+    console.error('Send message error:', error.response || error);
+    throw error;
   }
-});
-
-// Post a reply to a message
-router.post('/:id/reply', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { user, text } = req.body;
-    if (!text) {
-      return res.status(400).json({ message: 'Reply text is required.' });
-    }
-    const message = await ChatForum.findById(id);
-    if (!message) return res.status(404).json({ message: 'Message not found.' });
-    message.replies.push({ user: user || 'Anonymous', text });
-    await message.save();
-    res.json(message);
-  } catch (err) {
-    res.status(500).json({ message: 'Server error.' });
-  }
-});
-
-module.exports = router;
+};
