@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getTimetable, addDay, updatePeriod } from "../api/TimeTableapi.js";
+import { getTimetable, updatePeriod } from "../api/TimeTableapi.js";
 import {
   Box,
   Paper,
   Typography,
-  Grid,
-  Button,
-  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -17,7 +14,6 @@ import {
   MenuItem,
   Alert,
 } from "@mui/material";
-import { Edit as EditIcon, Save as SaveIcon } from "@mui/icons-material";
 import "../styles/TimeTablePage.css";
 
 const defaultPeriods = 8;
@@ -82,7 +78,6 @@ function TimetablePage({ userId }) {
   const handleEdit = async (rowIdx, periodIdx, value) => {
     const day = timetableData[rowIdx].day;
     try {
-      // First update locally
       const updatedData = timetableData.map((row, i) =>
         i === rowIdx
           ? { ...row, periods: row.periods.map((p, j) => (j === periodIdx ? value : p)) }
@@ -90,19 +85,17 @@ function TimetablePage({ userId }) {
       );
       setTimetableData(updatedData);
 
-      // Then send to server
       await updatePeriod({
         studentId: userId,
         day,
         periodIdx,
         value
       });
-      
+
       showMessage("Period updated successfully");
       setEditCell(null);
     } catch (error) {
       console.error('Update error:', error);
-      // Revert the change if server update fails
       getTimetable(userId).then(res => {
         const data = res.data;
         const filled = defaultDays.map((day) => {
@@ -119,12 +112,7 @@ function TimetablePage({ userId }) {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h3" sx={{ 
-        mb: 3, 
-        fontWeight: 'bold',
-        color: '#000000',
-        textAlign: 'center'
-      }}>
+      <Typography variant="h3" sx={{ mb: 3, fontWeight: 'bold', color: '#000000', textAlign: 'center' }}>
         My Timetable
       </Typography>
 
@@ -138,90 +126,30 @@ function TimetablePage({ userId }) {
         <Table sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow sx={{ bgcolor: '#2C3E50' }}>
-              <TableCell 
-                sx={{ 
-                  fontWeight: "bold", 
-                  width: "120px",
-                  color: 'white',
-                  '&.MuiTableCell-head': {
-                    color: 'white',
-                    bgcolor: '#2C3E50'
-                  }
-                }}
-              >
+              <TableCell sx={{ fontWeight: "bold", width: "120px", color: 'white' }}>
                 Day
               </TableCell>
               {timeSlots.map((time, idx) => (
-                <TableCell 
-                  key={idx} 
-                  align="center" 
-                  sx={{ 
-                    fontWeight: "bold",
-                    color: 'white',
-                    bgcolor: '#2C3E50',
-                    '&.MuiTableCell-head': {
-                      color: 'white'
-                    }
-                  }}
-                >
-                  <Typography 
-                    variant="subtitle2" 
-                    sx={{ 
-                      fontWeight: "bold",
-                      color: 'white'
-                    }}
-                  >
+                <TableCell key={idx} align="center" sx={{ fontWeight: "bold", color: 'white' }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
                     Period {idx + 1}
                   </Typography>
-                  <Typography 
-                    variant="caption" 
-                    display="block"
-                    sx={{ color: 'white' }}
-                  >
-                    {time}
-                  </Typography>
+                  <Typography variant="caption" display="block">{time}</Typography>
                 </TableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
             {timetableData.map((row, rowIdx) => (
-              <TableRow 
-                key={row.day} 
-                hover
-              >
-                <TableCell 
-                  component="th" 
-                  scope="row" 
-                  sx={{ 
-                    fontWeight: "bold",
-                    bgcolor: '#2C3E50',
-                    color: 'white',
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                    width: '120px',
-                    '&.MuiTableCell-body': {
-                      color: 'white'
-                    },
-                    '&:hover': {
-                      bgcolor: '#34495E'
-                    }
-                  }}
-                >
+              <TableRow key={row.day} hover>
+                <TableCell component="th" scope="row" sx={{ fontWeight: "bold", bgcolor: '#2C3E50', color: 'white' }}>
                   {row.day}
                 </TableCell>
                 {row.periods.map((period, periodIdx) => (
-                  <TableCell 
-                    key={periodIdx} 
-                    align="center" 
-                    sx={{ 
-                      minWidth: 150, 
-                      bgcolor: 'background.paper',
-                      border: '1px solid rgba(224, 224, 224, 0.4)',
-                      p: 1,
-                      '&:hover': {
-                        bgcolor: 'rgba(0, 0, 0, 0.02)'
-                      }
-                    }}
+                  <TableCell
+                    key={periodIdx}
+                    align="center"
+                    sx={{ minWidth: 150, bgcolor: 'background.paper', border: '1px solid rgba(224, 224, 224, 0.4)', p: 1 }}
                   >
                     {editCell?.rowIdx === rowIdx && editCell?.periodIdx === periodIdx ? (
                       <Select
@@ -231,18 +159,6 @@ function TimetablePage({ userId }) {
                         onChange={(e) => handleEdit(rowIdx, periodIdx, e.target.value)}
                         onBlur={() => setEditCell(null)}
                         autoFocus
-                        sx={{
-                          bgcolor: 'background.paper',
-                          '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'primary.light',
-                          },
-                          '&:hover .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'primary.main',
-                          },
-                          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'primary.main',
-                          }
-                        }}
                       >
                         <MenuItem value="">
                           <em>None</em>
@@ -267,8 +183,6 @@ function TimetablePage({ userId }) {
                           color: period ? 'text.primary' : 'text.secondary',
                           fontWeight: period ? 500 : 400,
                           fontSize: '0.875rem',
-                          transition: 'all 0.2s ease',
-                          bgcolor: 'background.paper',
                           '&:hover': {
                             bgcolor: 'rgba(0, 0, 0, 0.04)',
                             transform: 'scale(1.02)'
