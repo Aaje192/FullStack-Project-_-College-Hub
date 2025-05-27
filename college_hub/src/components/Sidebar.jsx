@@ -22,7 +22,7 @@ const Sidebar = ({ onLogout }) => {
     { text: 'Timetable', icon: <TimetableIcon />, path: '/timetable', desc: 'Check your schedule' },
     { text: 'Profile', icon: <ProfileIcon />, path: '/profile', desc: 'Manage your profile' },
     { text: 'Tasks', icon: <TasksIcon />, path: '/tasks', desc: 'Manage your tasks' },
-    { text: 'Chat Forums', icon: <ChatIcon />, path: '/chat', desc: 'Join discussion forums' },
+    { text: 'Chat Forum', icon: <ChatIcon />, path: '/chat', desc: 'Join discussion forums' },
     { text: 'Notes', icon: <NotesIcon />, path: '/notes', desc: 'Access study materials' }
   ];
 

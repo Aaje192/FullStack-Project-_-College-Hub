@@ -50,7 +50,7 @@ const Navbar = ({ onLogout }) => {
   sx={{ 
     zIndex: (theme) => theme.zIndex.drawer + 1,
     backgroundColor: (theme) => theme.palette.background.default,
-    color: (theme) => theme.palette.text.primary,
+    color: '#1976d2',
     boxShadow: 'none',
     borderBottom: (theme) => `1px solid ${theme.palette.divider}`
   }}
@@ -74,7 +74,7 @@ const Navbar = ({ onLogout }) => {
           sx={{ 
             flexGrow: 1,
             fontWeight: 'bold',
-            color: '#1976d2',
+            color: '#4a4a4a',
             display: 'flex',
             alignItems: 'center'
           }}

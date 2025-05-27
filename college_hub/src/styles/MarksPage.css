@@ -3,9 +3,10 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #121212;
-  color: #ccc;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
+  color: #ffffff;
+  min-height: 100vh;
 }
 
 /* Centered container */
@@ -13,187 +14,392 @@ html, body {
   max-width: 1200px;
   margin: 40px auto;
   padding: 20px;
-  background-color: #1e1e1e;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
+  position: relative;
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.15"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+  opacity: 0.8;
+  z-index: -1;
+  border-radius: 20px;
 }
 
 /* Marks Form */
 .MarksForm {
-  background-color: #1e1e1e;
-  padding: 20px;
-  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   display: flex;
-  align-items: flex-end;
-  gap: 16px;
+  align-items: flex-start;
+  gap: 45px;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.MarksForm::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(to right, #00f2fe, #4facfe);
+}
+
+.MarksForm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .MarksForm label {
   display: flex;
   flex-direction: column;
-  font-size: 14px;
-  min-width: 150px;
-  color: #ddd;
+  font-size: 18px;
+  min-width: 200px;
+  color: #ffffff;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  margin-bottom: 25px;
 }
 
 .MarksForm input {
-  padding: 8px;
-  margin-top: 4px;
-  background-color: #2b2b2b;
-  border: 1px solid #444;
-  color: white;
-  border-radius: 6px;
-  width: 160px;
+  padding: 12px 16px;
+  margin-top: 12px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: #000000;
+  border-radius: 8px;
+  width: 220px;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.MarksForm input:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  background-color: #ffffff;
+}
+
+.MarksForm input:focus {
+  border-color: #4facfe;
+  box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.3);
+  outline: none;
+  background-color: #ffffff;
 }
 
 .MarksForm button {
-  padding: 10px 20px;
-  background-color: #007bff;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
   border: none;
   color: white;
-  font-weight: bold;
-  border-radius: 6px;
+  font-weight: 700;
+  border-radius: 8px;
   cursor: pointer;
-  margin-top: 22px;
-}
-
-.MarksForm button:hover {
-  background-color: #0056b3;
-}
-
-/* marks-form (legacy, remove if not used in JSX) */
-.marks-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.marks-form label {
-  display: flex;
-  flex-direction: column;
+  margin-top: 55px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   font-size: 16px;
-  color: #f0f0f0;
-  min-width: 160px;
-  flex: 1 1 160px;
-}
-
-.marks-form input,
-.marks-form select {
-  padding: 10px;
-  border: 1px solid #555;
-  border-radius: 4px;
-  background-color: #444;
-  color: #f0f0f0;
-  margin-top: 6px;
-}
-
-.marks-form button {
-  padding: 10px 20px;
-  background-color: #0066cc;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 10px;
+  min-width: 150px;
   align-self: flex-end;
 }
 
-.marks-form button:hover {
-  background-color: #005bb5;
+.MarksForm button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
 }
 
 /* Filter Controls */
 .filter-controls {
-  background-color: #222;
-  padding: 15px 20px;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  margin-bottom: 24px;
+  position: relative;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.filter-controls::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(to right, #ff9a9e, #fad0c4);
 }
 
 .filter-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 24px;
   align-items: center;
 }
 
 .filter-group {
   display: flex;
   flex-direction: column;
-  color: #f0f0f0;
+  color: #ffffff;
   min-width: 180px;
 }
 
+.filter-group label {
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
 .filter-group select {
-  padding: 10px;
-  border-radius: 4px;
-  background-color: #444;
-  color: #fff;
-  margin-top: 6px;
-  border: 1px solid #555;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #000000;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+.filter-group select:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  background-color: #ffffff;
+}
+
+.filter-group select:focus {
+  border-color: #4facfe;
+  box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.3);
+  outline: none;
+  background-color: #ffffff;
 }
 
 /* Table and Chart layout */
 .main-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 24px;
 }
 
 /* Marks Table */
 .marks-table {
-  background-color: #222;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  overflow-x: auto;
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.marks-table::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(to right, #a18cd1, #fbc2eb);
+}
+
+.marks-table:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .marks-table table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .marks-table th,
 .marks-table td {
-  padding: 10px;
+  padding: 16px;
   text-align: left;
-  border: 1px solid #555;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
 
 .marks-table th {
-  background-color: #333;
-  color: #ddd;
+  background-color: rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-.marks-table td {
-  background-color: #444;
-  color: #ccc;
+.marks-table tr:last-child td {
+  border-bottom: none;
+}
+
+.marks-table tbody tr {
+  transition: all 0.3s ease;
+}
+
+.marks-table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.marks-table td button {
+  padding: 8px 16px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.marks-table td button:hover {
+  background-color: #c0392b;
+  transform: translateY(-1px);
 }
 
 /* Marks Chart */
 .marks-chart {
-  background-color: #222;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  min-height: 400px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.marks-chart::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(to right, #84fab0, #8fd3f4);
+}
+
+.marks-chart:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .marks-chart canvas {
-  width: 100%;
-  height: auto;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 400px;
+}
+
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 500;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+  .container {
+    margin: 20px auto;
+    padding: 16px;
+  }
+  
   .main-content {
     grid-template-columns: 1fr;
   }
+}
+
+@media (max-width: 768px) {
+  .MarksForm {
+    padding: 20px;
+  }
+  
+  .filter-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-group {
+    min-width: 100%;
+  }
+  
+  .marks-table {
+    padding: 16px;
+  }
+  
+  .marks-table th,
+  .marks-table td {
+    padding: 12px;
+  }
+  
+  .MarksForm input,
+  .filter-group select {
+    width: 100%;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a2e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4361ee;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3250e0;
 }

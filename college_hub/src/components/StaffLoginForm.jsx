@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, Avatar, IconButton, InputAdornment, Alert } from '@mui/material';
 import { Visibility, VisibilityOff, Work } from '@mui/icons-material';
 import { loginUser } from '../api/Userapi';
+import ForgotPasswordForm from './ForgotPasswordForm';
 
 const StaffLoginForm = ({ onSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,10 +25,16 @@ const StaffLoginForm = ({ onSuccess }) => {
     }
   };
 
+  if (showForgotPassword) {
+    return <ForgotPasswordForm onCancel={() => setShowForgotPassword(false)} />;
+  }
+
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
-        <Avatar sx={{ bgcolor: '#1976d2', width: 56, height: 56, mb: 1 }}><Work fontSize="large" /></Avatar>
+        <Avatar sx={{ bgcolor: '#1976d2', width: 56, height: 56, mb: 1 }}>
+          <Work fontSize="large" />
+        </Avatar>
         <Typography variant="h5">Staff Login</Typography>
       </Box>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
@@ -58,8 +66,29 @@ const StaffLoginForm = ({ onSuccess }) => {
           )
         }}
       />
-      <Button fullWidth type="submit" variant="contained" sx={{ mt: 3, mb: 2, py: 1.5 }}>
+      <Button
+        fullWidth
+        type="submit"
+        variant="contained"
+        sx={{ 
+          mt: 3, 
+          mb: 2, 
+          py: 1.5,
+          bgcolor: '#4a4a4a',
+          '&:hover': {
+            bgcolor: '#333333'
+          }
+        }}
+      >
         Login
+      </Button>
+      <Button
+        fullWidth
+        variant="text"
+        onClick={() => setShowForgotPassword(true)}
+        sx={{ mb: 2 }}
+      >
+        Forgot Password?
       </Button>
       <Typography variant="caption" color="text.secondary">
         Sample: user / 123

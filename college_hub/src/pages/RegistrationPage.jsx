@@ -90,16 +90,21 @@ const RegistrationPage = () => {
         course: userType === 'student' ? form.course : undefined,
         mobile: form.mobile
       };
-      const res = await registerUser(payload);
-      if (res.message === 'Registration successful.') {
+      console.log('Sending registration payload:', payload);
+      const response = await registerUser(payload);
+      console.log('Registration response:', response);
+      
+      if (response.data && response.data.message === 'Registration successful.') {
         setSuccess('Registration successful!');
         setError('');
+        setTimeout(() => navigate('/'), 2000); // Redirect to login after 2 seconds
       } else {
-        setError(res.message || 'Registration failed.');
+        setError(response.data?.message || 'Registration failed.');
         setSuccess('');
       }
-    } catch {
-      setError('Server error.');
+    } catch (error) {
+      console.error('Registration error:', error);
+      setError(error.response?.data?.message || 'Server error. Please try again.');
       setSuccess('');
     }
   };

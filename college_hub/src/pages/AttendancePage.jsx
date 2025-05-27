@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getAttendance, markAttendance } from "../api/Attendanceapi";
 import "../styles/Attendance.css";
+import { Typography } from "@mui/material";
 
 function AttendancePage({ userId }) {
   const [paper, setPaper] = useState("");
@@ -40,6 +41,11 @@ function AttendancePage({ userId }) {
       const data = response.data;
       if (response.status === 200 || response.status === 201) {
         setMessage(data.message || "Attendance marked successfully.");
+        setPaper("");
+        setDate("");
+        setHour("");
+        setStatus("");
+        setTotalHours("");
         getAttendance({ paper, studentId: userId })
           .then((res) => setAttendanceRecords(res.data))
           .catch(() => setAttendanceRecords([]));
@@ -54,7 +60,9 @@ function AttendancePage({ userId }) {
   return (
     <div className="attendance-container" style={{ display: "flex", gap: 32 }}>
       <div style={{ flex: 1 }}>
-        <h1 className="attendance-heading">Mark Your Attendance</h1>
+        <Typography variant="h4" gutterBottom sx={{ mb: 4, fontWeight: "bold", textAlign: "center" }}>
+          Attendance
+        </Typography>
         <div className="form-row">
           <div className="form-group">
             <label>Paper</label>

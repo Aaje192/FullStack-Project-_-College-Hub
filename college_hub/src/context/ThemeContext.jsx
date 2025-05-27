@@ -14,11 +14,11 @@ export const ThemeProvider = ({ children }) => {
     '--card-shadow': mode === 'light'
       ? '0 4px 24px rgba(0,0,0,0.07)'
       : '0 4px 24px rgba(0,0,0,0.45)',
-    '--sidebar-bg': mode === 'light' ? '#e3eafc' : '#23272f',
+    '--sidebar-bg': mode === 'light' ? '#f5f5f5' : '#23272f',
     '--navbar-bg': mode === 'light' ? '#fff' : '#23272f',
     '--sidebar-text': mode === 'light' ? '#222' : '#f5f7fa',
     '--navbar-text': mode === 'light' ? '#222' : '#f5f7fa',
-    '--sidebar-active': mode === 'light' ? '#1976d2' : '#90caf9',
+    '--sidebar-active': mode === 'light' ? '#4a4a4a' : '#90caf9',
   }), [mode]);
 
   React.useEffect(() => {

@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
-import { ThemeProvider } from './context/ThemeContext';
+import App from './App.jsx';
 import './index.css';
+import './api/axiosConfig.js';  // Import axios config
+import { ThemeProvider } from './context/ThemeContext';
+
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <ThemeProvider>
-    <App />
-  </ThemeProvider>
+  <React.StrictMode>
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
 );

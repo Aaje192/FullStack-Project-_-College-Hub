@@ -1,29 +1,51 @@
 import React, { useEffect, useState } from "react";
-import { getTimetable, addDay, updatePeriod, deleteDay } from "../api/TimeTableapi.js";
+import { getTimetable, updatePeriod } from "../api/TimeTableapi.js";
+import {
+  Box,
+  Paper,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Select,
+  MenuItem,
+  Alert,
+} from "@mui/material";
 import "../styles/TimeTablePage.css";
 
 const defaultPeriods = 8;
-const defaultDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const defaultDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+const commonSubjects = [
+  "Mathematics",
+  "Physics",
+  "Chemistry",
+  "Computer Science",
+  "English",
+  "Break",
+  "Lab",
+  "Free Period"
+];
 
-const Button = ({ children, onClick, style = {} }) => {
-  return (
-    <button onClick={onClick} className="custom-button" style={style}>
-      {children}
-    </button>
-  );
-};
+const timeSlots = [
+  "9:00 - 9:50",
+  "10:00 - 10:50",
+  "11:00 - 11:50",
+  "12:00 - 12:50",
+  "1:00 - 1:50",
+  "2:00 - 2:50",
+  "3:00 - 3:50",
+  "4:00 - 4:50"
+];
 
 function TimetablePage({ userId }) {
   const [timetableData, setTimetableData] = useState([]);
-  const [editIndex, setEditIndex] = useState(null);
-  const [editedPeriods, setEditedPeriods] = useState([]);
-  const [newDay, setNewDay] = useState("");
-  const [newPeriods, setNewPeriods] = useState(Array(defaultPeriods).fill(""));
   const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState("success");
+  const [editCell, setEditCell] = useState(null);
 
-  const dayOrder = defaultDays;
-
-  // Load timetable or initialize with blank periods
   useEffect(() => {
     getTimetable(userId)
       .then((res) => {
@@ -47,176 +69,137 @@ function TimetablePage({ userId }) {
       });
   }, [userId]);
 
-  const handleEdit = (index) => {
-    setEditIndex(index);
-    setEditedPeriods([...timetableData[index].periods]);
+  const showMessage = (text, type = "success") => {
+    setMessage(text);
+    setSeverity(type);
+    setTimeout(() => setMessage(""), 3000);
   };
 
-  const handleSave = async (index) => {
-    const day = timetableData[index].day;
-    try {
-      await Promise.all(
-        editedPeriods.map((value, periodIdx) =>
-          updatePeriod({ studentId: userId, day, periodIdx, value })
-        )
-      );
-      const updated = [...timetableData];
-      updated[index].periods = editedPeriods;
-      setTimetableData(updated);
-      setEditIndex(null);
-      setMessage(`Saved changes for ${day}.`);
-    } catch {
-      setMessage("Failed to save changes.");
-    }
-  };
-
-  const handleDelete = async (index) => {
-    const day = timetableData[index].day;
-    if (window.confirm("Are you sure you want to delete this day?")) {
-      try {
-        await deleteDay(userId, day);
-        const updated = timetableData.filter((_, i) => i !== index);
-        setTimetableData(updated);
-        setMessage("Day deleted.");
-      } catch {
-        setMessage("Failed to delete day.");
-      }
-    }
-  };
-
-  const handleChange = (value, periodIndex) => {
-    const updated = [...editedPeriods];
-    updated[periodIndex] = value;
-    setEditedPeriods(updated);
-  };
-
-  const handleNewPeriodChange = (value, index) => {
-    const updated = [...newPeriods];
-    updated[index] = value;
-    setNewPeriods(updated);
-  };
-
-  const handleAddDay = async () => {
-    if (!newDay.trim() || newPeriods.some((p) => !p.trim())) {
-      setMessage("Please fill all fields for the new day.");
-      return;
-    }
-
-    try {
-      const res = await addDay({ studentId: userId, day: newDay.trim(), periods: newPeriods });
-      const updated = [...timetableData.filter(d => d.day.toLowerCase() !== newDay.trim().toLowerCase()), res.data];
-      updated.sort((a, b) => dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day));
-      setTimetableData(updated);
-      setNewDay("");
-      setNewPeriods(Array(defaultPeriods).fill(""));
-      setMessage("Day added successfully.");
-    } catch {
-      setMessage("Failed to add day.");
-    }
-  };
-
-  const handleEditPeriod = async (rowIdx, periodIdx, value) => {
+  const handleEdit = async (rowIdx, periodIdx, value) => {
     const day = timetableData[rowIdx].day;
     try {
-      await updatePeriod({ studentId: userId, day, periodIdx, value });
-      setTimetableData((prev) =>
-        prev.map((row, i) =>
-          i === rowIdx
-            ? { ...row, periods: row.periods.map((p, j) => (j === periodIdx ? value : p)) }
-            : row
-        )
+      const updatedData = timetableData.map((row, i) =>
+        i === rowIdx
+          ? { ...row, periods: row.periods.map((p, j) => (j === periodIdx ? value : p)) }
+          : row
       );
-      setMessage("Period updated.");
-    } catch {
-      setMessage("Failed to update period.");
+      setTimetableData(updatedData);
+
+      await updatePeriod({
+        studentId: userId,
+        day,
+        periodIdx,
+        value
+      });
+
+      showMessage("Period updated successfully");
+      setEditCell(null);
+    } catch (error) {
+      console.error('Update error:', error);
+      getTimetable(userId).then(res => {
+        const data = res.data;
+        const filled = defaultDays.map((day) => {
+          const found = data.find((row) => row.day === day);
+          return found
+            ? { ...found, periods: [...found.periods, ...Array(defaultPeriods - found.periods.length).fill("")].slice(0, defaultPeriods) }
+            : { day, studentId: userId, periods: Array(defaultPeriods).fill("") };
+        });
+        setTimetableData(filled);
+      });
+      showMessage("Failed to update period: " + (error.response?.data?.message || "Server error"), "error");
     }
   };
 
   return (
-    <div className="timetable-container">
-      <h1 className="timetable-title">Class Timetable for Staff</h1>
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h3" sx={{ mb: 3, fontWeight: 'bold', color: '#000000', textAlign: 'center' }}>
+        My Timetable
+      </Typography>
 
-      {message && <p className="timetable-message">{message}</p>}
+      {message && (
+        <Alert severity={severity} sx={{ mb: 3 }}>
+          {message}
+        </Alert>
+      )}
 
-      <div className="input-section">
-        <input
-          type="text"
-          placeholder="Enter Day (e.g., Monday)"
-          value={newDay}
-          onChange={(e) => setNewDay(e.target.value)}
-          className="day-input"
-        />
-        <div className="periods-input">
-          {newPeriods.map((value, index) => (
-            <input
-              key={index}
-              type="text"
-              placeholder={`Period ${index + 1}`}
-              value={value}
-              onChange={(e) => handleNewPeriodChange(e.target.value, index)}
-              className="period-input"
-            />
-          ))}
-        </div>
-        <Button onClick={handleAddDay} style={{ backgroundColor: "#28a745" }}>
-          Add Day
-        </Button>
-      </div>
-
-      <table className="timetable-table">
-        <thead>
-          <tr>
-            <th>Day</th>
-            {Array.from({ length: defaultPeriods }).map((_, i) => (
-              <th key={i}>Period {i + 1}</th>
+      <TableContainer component={Paper} elevation={3} sx={{ borderRadius: 2 }}>
+        <Table sx={{ minWidth: 650 }}>
+          <TableHead>
+            <TableRow sx={{ bgcolor: '#2C3E50' }}>
+              <TableCell sx={{ fontWeight: "bold", width: "120px", color: 'white' }}>
+                Day
+              </TableCell>
+              {timeSlots.map((time, idx) => (
+                <TableCell key={idx} align="center" sx={{ fontWeight: "bold", color: 'white' }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+                    Period {idx + 1}
+                  </Typography>
+                  <Typography variant="caption" display="block">{time}</Typography>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {timetableData.map((row, rowIdx) => (
+              <TableRow key={row.day} hover>
+                <TableCell component="th" scope="row" sx={{ fontWeight: "bold", bgcolor: '#2C3E50', color: 'white' }}>
+                  {row.day}
+                </TableCell>
+                {row.periods.map((period, periodIdx) => (
+                  <TableCell
+                    key={periodIdx}
+                    align="center"
+                    sx={{ minWidth: 150, bgcolor: 'background.paper', border: '1px solid rgba(224, 224, 224, 0.4)', p: 1 }}
+                  >
+                    {editCell?.rowIdx === rowIdx && editCell?.periodIdx === periodIdx ? (
+                      <Select
+                        size="small"
+                        value={period}
+                        fullWidth
+                        onChange={(e) => handleEdit(rowIdx, periodIdx, e.target.value)}
+                        onBlur={() => setEditCell(null)}
+                        autoFocus
+                      >
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+                        {commonSubjects.map((subject) => (
+                          <MenuItem key={subject} value={subject}>
+                            {subject}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    ) : (
+                      <Box
+                        onClick={() => setEditCell({ rowIdx, periodIdx })}
+                        sx={{
+                          cursor: "pointer",
+                          p: 1.5,
+                          borderRadius: 1,
+                          minHeight: '40px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: period ? 'text.primary' : 'text.secondary',
+                          fontWeight: period ? 500 : 400,
+                          fontSize: '0.875rem',
+                          '&:hover': {
+                            bgcolor: 'rgba(0, 0, 0, 0.04)',
+                            transform: 'scale(1.02)'
+                          }
+                        }}
+                      >
+                        {period || "Click to edit"}
+                      </Box>
+                    )}
+                  </TableCell>
+                ))}
+              </TableRow>
             ))}
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {timetableData.map((row, index) => (
-            <tr key={index}>
-              <td>{row.day}</td>
-              {editIndex === index
-                ? editedPeriods.map((className, i) => (
-                    <td key={i}>
-                      <input
-                        type="text"
-                        value={className}
-                        onChange={(e) => handleChange(e.target.value, i)}
-                        className="period-input"
-                      />
-                    </td>
-                  ))
-                : row.periods.map((className, i) => (
-                    <td key={i}>
-                      <input
-                        value={className}
-                        onChange={(e) => handleEditPeriod(index, i, e.target.value)}
-                      />
-                    </td>
-                  ))}
-              <td>
-                {editIndex === index ? (
-                  <Button onClick={() => handleSave(index)} style={{ backgroundColor: "green" }}>
-                    Save
-                  </Button>
-                ) : (
-                  <Button onClick={() => handleEdit(index)}>Edit</Button>
-                )}
-                <Button onClick={() => handleDelete(index)} style={{ backgroundColor: "red" }}>
-                  Delete
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <Button onClick={() => alert("Back to Dashboard")} style={{ marginTop: "40px" }}>
-        Back
-      </Button>
-    </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }
 
