@@ -49,10 +49,10 @@ const Navbar = ({ onLogout }) => {
   position="fixed" 
   sx={{ 
     zIndex: (theme) => theme.zIndex.drawer + 1,
-    backgroundColor: (theme) => theme.palette.background.default,
-    color: '#1976d2',
-    boxShadow: 'none',
-    borderBottom: (theme) => `1px solid ${theme.palette.divider}`
+    backgroundColor: '#ffffff',
+    color: '#2c3e50',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+    borderBottom: '1px solid #e1e8ed'
   }}
 >
       <Toolbar>
@@ -73,8 +73,8 @@ const Navbar = ({ onLogout }) => {
           component="div" 
           sx={{ 
             flexGrow: 1,
-            fontWeight: 'bold',
-            color: '#4a4a4a',
+            fontWeight: 700,
+            color: '#2c3e50',
             display: 'flex',
             alignItems: 'center'
           }}
@@ -84,7 +84,11 @@ const Navbar = ({ onLogout }) => {
             sx={{ 
               display: 'inline-block',
               mr: 1,
-              fontSize: '1.5rem'
+              fontSize: '1.4rem',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
             }}
           >
             COLLEGE HUB
@@ -96,7 +100,13 @@ const Navbar = ({ onLogout }) => {
           size="large"
           aria-label="show notifications"
           color="inherit"
-          sx={{ mr: 1 }}
+          sx={{ 
+            mr: 1,
+            color: '#667eea',
+            '&:hover': {
+              backgroundColor: '#f8f9fa'
+            }
+          }}
         >
           <NotificationsIcon />
         </IconButton>
@@ -109,8 +119,18 @@ const Navbar = ({ onLogout }) => {
           aria-haspopup="true"
           onClick={handleMenu}
           color="inherit"
+          sx={{
+            '&:hover': {
+              backgroundColor: '#f8f9fa'
+            }
+          }}
         >
-          <Avatar sx={{ width: 32, height: 32, bgcolor: '#1976d2' }}>
+          <Avatar sx={{ 
+            width: 36, 
+            height: 36, 
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            boxShadow: '0 2px 8px rgba(102, 126, 234, 0.3)'
+          }}>
             <UserIcon fontSize="small" />
           </Avatar>
         </IconButton>
