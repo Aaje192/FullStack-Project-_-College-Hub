@@ -9,9 +9,20 @@ import {
   ListItem, 
   ListItemText,
   Avatar,
-  Divider
+  Divider,
+  Card,
+  CardContent,
+  Chip,
+  IconButton,
+  InputAdornment
 } from '@mui/material';
-import { Send } from '@mui/icons-material';
+import { 
+  Send, 
+  Forum, 
+  Message as MessageIcon,
+  EmojiEmotions,
+  AttachFile
+} from '@mui/icons-material';
 import { getAllMessages, sendMessage } from '../api/ChatForumApi';
 
 const ChatForumsPage = ({ userId }) => {
@@ -70,100 +81,158 @@ const ChatForumsPage = ({ userId }) => {
   };
 
   return (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', p: 2 }}>
-      <Typography variant="h4" gutterBottom>
-        Student Chat Forum
-      </Typography>
-      
+    <Box sx={{ p: 2, height: 'calc(100vh - 100px)', display: 'flex', flexDirection: 'column' }}>
+      {/* Header */}
+      <Paper sx={{ 
+        p: 3, 
+        mb: 2, 
+        borderRadius: 3,
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        color: 'white',
+        boxShadow: '0 4px 20px rgba(102, 126, 234, 0.3)'
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.2)', width: 48, height: 48 }}>
+            <Forum />
+          </Avatar>
+          <Box>
+            <Typography variant="h5" sx={{ fontWeight: 700 }}>
+              Chat Forum
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.9 }}>
+              Connect and discuss with your classmates
+            </Typography>
+          </Box>
+          <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
+            <Chip 
+              label={`${messages.length} messages`} 
+              sx={{ 
+                bgcolor: 'rgba(255,255,255,0.2)', 
+                color: 'white',
+                fontWeight: 600
+              }} 
+            />
+          </Box>
+        </Box>
+      </Paper>
+
       {error && (
-        <Typography color="error" sx={{ mb: 2 }}>
-          {error}
-        </Typography>
+        <Paper sx={{ p: 2, mb: 2, bgcolor: '#ffebee', borderRadius: 2 }}>
+          <Typography color="error" variant="body2">{error}</Typography>
+        </Paper>
       )}
 
+      {/* Messages Container */}
       <Paper 
-        elevation={3} 
         sx={{ 
-          flex: 1, 
-          mb: 2, 
+          flex: 1,
           overflow: 'auto',
-          maxHeight: 'calc(100vh - 250px)',
-          p: 2,
-          bgcolor: '#f5f5f5'
+          borderRadius: 3,
+          background: 'linear-gradient(to bottom, #f8f9fa, #ffffff)',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
         }}
       >
-        <List>
-          {messages.map((msg, index) => (
-            <React.Fragment key={msg._id || index}>
-              <ListItem 
-                alignItems="flex-start"
-                sx={{
-                  flexDirection: msg.senderId === userId ? 'row-reverse' : 'row',
-                }}
-              >
-                <Avatar 
-                  sx={{ 
-                    bgcolor: msg.senderId === userId ? '#4a4a4a' : '#757575',
-                    mr: msg.senderId === userId ? 0 : 2,
-                    ml: msg.senderId === userId ? 2 : 0
+        <List sx={{ p: 2 }}>
+          {messages.length === 0 ? (
+            <Box sx={{ textAlign: 'center', py: 8 }}>
+              <MessageIcon sx={{ fontSize: '4rem', color: '#e0e0e0', mb: 2 }} />
+              <Typography color="text.secondary" variant="h6">
+                No messages yet
+              </Typography>
+              <Typography color="text.secondary" variant="body2">
+                Be the first to start the conversation!
+              </Typography>
+            </Box>
+          ) : (
+            messages.map((msg, index) => (
+              <React.Fragment key={msg._id || index}>
+                <ListItem 
+                  alignItems="flex-start"
+                  sx={{
+                    flexDirection: msg.senderId === userId ? 'row-reverse' : 'row',
+                    mb: 2
                   }}
                 >
-                  {msg.senderName[0].toUpperCase()}
-                </Avatar>
-                <ListItemText
-                  primary={
-                    <Typography
-                      component="span"
-                      variant="body1"
-                      sx={{ 
+                  <Avatar 
+                    sx={{ 
+                      bgcolor: msg.senderId === userId ? '#667eea' : '#4CAF50',
+                      mr: msg.senderId === userId ? 0 : 2,
+                      ml: msg.senderId === userId ? 2 : 0,
+                      width: 40,
+                      height: 40,
+                      fontWeight: 600,
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                    }}
+                  >
+                    {msg.senderName?.[0]?.toUpperCase() || 'U'}
+                  </Avatar>
+                  <Card
+                    sx={{
+                      maxWidth: '70%',
+                      bgcolor: msg.senderId === userId ? '#667eea' : '#ffffff',
+                      color: msg.senderId === userId ? 'white' : '#2c3e50',
+                      boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
+                      borderRadius: 3,
+                      border: msg.senderId !== userId ? '1px solid #e1e8ed' : 'none'
+                    }}
+                  >
+                    <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
+                      <Box sx={{ 
                         display: 'flex', 
-                        flexDirection: 'column',
-                        alignItems: msg.senderId === userId ? 'flex-end' : 'flex-start'
-                      }}
-                    >
-                      {msg.senderName}
-                      <Typography variant="caption" color="text.secondary">
-                        {formatTimestamp(msg.timestamp)}
+                        justifyContent: 'space-between', 
+                        alignItems: 'center',
+                        mb: 1 
+                      }}>
+                        <Typography 
+                          variant="subtitle2" 
+                          sx={{ 
+                            fontWeight: 600,
+                            opacity: msg.senderId === userId ? 0.9 : 0.8
+                          }}
+                        >
+                          {msg.senderName || 'Unknown User'}
+                        </Typography>
+                        <Typography 
+                          variant="caption" 
+                          sx={{ 
+                            opacity: 0.7,
+                            fontSize: '0.7rem'
+                          }}
+                        >
+                          {formatTimestamp(msg.timestamp)}
+                        </Typography>
+                      </Box>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          wordBreak: 'break-word',
+                          lineHeight: 1.4
+                        }}
+                      >
+                        {msg.message}
                       </Typography>
-                    </Typography>
-                  }
-                  secondary={
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      sx={{
-                        display: 'inline-block',
-                        bgcolor: msg.senderId === userId ? '#e0e0e0' : '#ffffff',
-                        p: 1,
-                        borderRadius: 1,
-                        maxWidth: '80%',
-                        wordBreak: 'break-word'
-                      }}
-                    >
-                      {msg.message}
-                    </Typography>
-                  }
-                  sx={{
-                    textAlign: msg.senderId === userId ? 'right' : 'left',
-                  }}
-                />
-              </ListItem>
-              {index < messages.length - 1 && <Divider variant="middle" sx={{ bgcolor: '#e0e0e0' }} />}
-            </React.Fragment>
-          ))}
+                    </CardContent>
+                  </Card>
+                </ListItem>
+              </React.Fragment>
+            ))
+          )}
           <div ref={messagesEndRef} />
         </List>
       </Paper>
 
+      {/* Message Input */}
       <Paper 
         component="form" 
         onSubmit={handleSendMessage}
         sx={{ 
           p: 2, 
+          mt: 2,
           display: 'flex', 
           alignItems: 'center', 
           gap: 2,
-          bgcolor: '#f5f5f5'
+          borderRadius: 3,
+          boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
         }}
       >
         <TextField
@@ -172,29 +241,48 @@ const ChatForumsPage = ({ userId }) => {
           placeholder="Type your message..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          size="small"
           sx={{
             '& .MuiOutlinedInput-root': {
-              bgcolor: '#ffffff'
+              borderRadius: 3,
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#667eea'
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#667eea'
+              }
             }
+          }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton size="small" sx={{ color: '#667eea' }}>
+                  <EmojiEmotions />
+                </IconButton>
+              </InputAdornment>
+            )
           }}
         />
         <Button
           type="submit"
           variant="contained"
-          endIcon={<Send />}
           disabled={!newMessage.trim()}
           sx={{
-            bgcolor: '#4a4a4a',
+            px: 3,
+            py: 1.5,
+            borderRadius: 3,
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
             '&:hover': {
-              bgcolor: '#333333'
+              background: 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)',
+              boxShadow: '0 6px 16px rgba(102, 126, 234, 0.5)'
             },
             '&:disabled': {
-              bgcolor: '#cccccc'
+              background: '#e0e0e0',
+              boxShadow: 'none'
             }
           }}
         >
-          Send
+          <Send />
         </Button>
       </Paper>
     </Box>

@@ -35,21 +35,37 @@ const Sidebar = ({ onLogout }) => {
         '& .MuiDrawer-paper': {
           width: 280,
           boxSizing: 'border-box',
-          backgroundColor: 'var(--sidebar-bg)',
-          color: 'var(--sidebar-text)',
-          borderRight: mode === 'light' ? '1px solid #e0e0e0' : '1px solid #23272f',
+          backgroundColor: '#ffffff',
+          color: '#2c3e50',
+          borderRight: '1px solid #e1e8ed',
+          boxShadow: '2px 0 10px rgba(0,0,0,0.1)',
         },
       }}
     >
-      <Box sx={{ p: 2, textAlign: 'center' }}>
-        <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'var(--sidebar-active)' }}>
-          KOLLEGE
+      <Box sx={{ 
+        p: 3, 
+        textAlign: 'center',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        color: 'white'
+      }}>
+        <Typography variant="h5" sx={{ 
+          fontWeight: 'bold', 
+          letterSpacing: '1px',
+          textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+        }}>
+          KOLLEGE HUB
+        </Typography>
+        <Typography variant="caption" sx={{ 
+          opacity: 0.9,
+          fontWeight: 300
+        }}>
+          Student Portal
         </Typography>
       </Box>
       
       <Divider />
       
-      <List>
+      <List sx={{ px: 1, py: 2 }}>
         {menuItems.map((item) => (
           <ListItem 
             button 
@@ -57,26 +73,42 @@ const Sidebar = ({ onLogout }) => {
             component={Link} 
             to={item.path}
             sx={{
-              '&:hover': { backgroundColor: mode === 'light' ? '#e3f2fd' : '#263245' },
+              '&:hover': { 
+                backgroundColor: '#f8f9fa',
+                transform: 'translateX(4px)',
+                transition: 'all 0.2s ease-in-out'
+              },
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'flex-start',
               py: 2,
-              color: 'var(--sidebar-text)',
+              my: 0.5,
+              borderRadius: 2,
+              color: '#2c3e50',
             }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <ListItemIcon sx={{ minWidth: '40px', color: 'var(--sidebar-text)' }}>{item.icon}</ListItemIcon>
+            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+              <ListItemIcon sx={{ 
+                minWidth: '40px', 
+                color: '#667eea'
+              }}>
+                {item.icon}
+              </ListItemIcon>
               <ListItemText 
                 primary={item.text} 
-                primaryTypographyProps={{ fontWeight: 'medium', color: 'var(--sidebar-text)' }}
+                primaryTypographyProps={{ 
+                  fontWeight: 600, 
+                  color: '#2c3e50',
+                  fontSize: '0.95rem'
+                }}
               />
             </Box>
             <Typography variant="body2" sx={{ 
-              pl: 6, 
-              color: mode === 'light' ? 'text.secondary' : '#b0bec5',
+              pl: 5, 
+              color: '#7f8c8d',
               fontStyle: 'italic',
-              fontSize: '0.8rem'
+              fontSize: '0.75rem',
+              mt: 0.5
             }}>
               {item.desc}
             </Typography>
@@ -84,23 +116,33 @@ const Sidebar = ({ onLogout }) => {
         ))}
       </List>
       
-      <Divider sx={{ mt: 'auto' }} />
+      <Divider sx={{ mt: 'auto', borderColor: '#e1e8ed' }} />
       
       <ListItem 
         button 
         onClick={onLogout}
         sx={{
-          '&:hover': { backgroundColor: mode === 'light' ? '#ffebee' : '#3a2323' },
+          '&:hover': { 
+            backgroundColor: '#ffebee',
+            transform: 'translateX(4px)',
+            transition: 'all 0.2s ease-in-out'
+          },
           py: 2,
-          color: 'var(--sidebar-text)',
+          mx: 1,
+          my: 1,
+          borderRadius: 2,
+          color: '#e74c3c',
         }}
       >
-        <ListItemIcon sx={{ minWidth: '40px', color: 'var(--sidebar-text)' }}>
-          <LogoutIcon color="error" />
+        <ListItemIcon sx={{ minWidth: '40px', color: '#e74c3c' }}>
+          <LogoutIcon />
         </ListItemIcon>
         <ListItemText 
           primary="Logout" 
-          primaryTypographyProps={{ color: 'error' }}
+          primaryTypographyProps={{ 
+            color: '#e74c3c',
+            fontWeight: 600
+          }}
         />
       </ListItem>
     </Drawer>

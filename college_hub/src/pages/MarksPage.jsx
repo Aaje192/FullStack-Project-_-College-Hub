@@ -3,8 +3,21 @@ import MarksForm from '../components/MarksForm';
 import MarksTable from '../components/MarksTable';
 import MarksChart from '../components/MarksChart';
 import { getMarks, addMark, deleteMark } from '../api/Marksapi';
-import '../styles/MarksPage.css';
-import { Typography } from '@mui/material';
+import { 
+  Typography, 
+  Box, 
+  Paper, 
+  Grid, 
+  FormControl, 
+  InputLabel, 
+  Select, 
+  MenuItem,
+  CircularProgress,
+  Card,
+  CardContent,
+  Chip
+} from '@mui/material';
+import { Grade, TrendingUp, Assessment } from '@mui/icons-material';
 
 const MarksPage = ({ userId }) => {
   const [marks, setMarks] = useState([]);
@@ -72,56 +85,163 @@ const MarksPage = ({ userId }) => {
   console.log('filteredMarks:', filteredMarks); // <--- And here
 
   return (
-    <div className="container">
-      <Typography variant="h4" gutterBottom sx={{ mb: 4, fontWeight: "bold", textAlign: "center" }}>
-        Marks
-      </Typography>
-      <MarksForm onMarkAdded={reloadMarks} userId={userId} />
+    <Box sx={{ p: 2 }}>
+      {/* Header */}
+      <Box sx={{ mb: 4, textAlign: 'center' }}>
+        <Typography variant="h4" sx={{ 
+          fontWeight: 700, 
+          color: '#2c3e50',
+          mb: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 2
+        }}>
+          <Grade sx={{ fontSize: '2rem', color: '#667eea' }} />
+          Academic Marks
+        </Typography>
+        <Typography variant="subtitle1" color="text.secondary">
+          Track your academic performance and progress
+        </Typography>
+      </Box>
+
+      {/* Stats Cards */}
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ 
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            boxShadow: '0 4px 20px rgba(102, 126, 234, 0.3)'
+          }}>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box>
+                  <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                    {marks.length}
+                  </Typography>
+                  <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                    Total Marks
+                  </Typography>
+                </Box>
+                <Assessment sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ 
+            background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            color: 'white',
+            boxShadow: '0 4px 20px rgba(245, 87, 108, 0.3)'
+          }}>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box>
+                  <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                    {marks.length > 0 ? Math.round(marks.reduce((sum, mark) => sum + mark.marks, 0) / marks.length) : 0}
+                  </Typography>
+                  <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                    Average Score
+                  </Typography>
+                </Box>
+                <TrendingUp sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+
+      {/* Marks Form */}
+      <Paper sx={{ p: 3, mb: 3, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+        <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: '#2c3e50' }}>
+          Add New Mark
+        </Typography>
+        <MarksForm onMarkAdded={reloadMarks} userId={userId} />
+      </Paper>
       
-      <div className="filter-controls">
-        <div className="filter-row">
-          <div className="filter-group">
-            <label>filter by:</label>
-            <select
-              value={filterCriteria}
-              onChange={(e) => {
-                setFilterCriteria(e.target.value);
-                setFilterValue('');
-              }}
-            >
-              <option value="all">All Marks</option>
-              <option value="subject">Subject</option>
-              <option value="examType">Exam Type</option>
-              <option value="semester">Semester</option>
-            </select>
-          </div>
+      {/* Filter Controls */}
+      <Paper sx={{ p: 3, mb: 3, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+        <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: '#2c3e50' }}>
+          Filter Marks
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6} md={4}>
+            <FormControl fullWidth>
+              <InputLabel>Filter By</InputLabel>
+              <Select
+                value={filterCriteria}
+                label="Filter By"
+                onChange={(e) => {
+                  setFilterCriteria(e.target.value);
+                  setFilterValue('');
+                }}
+              >
+                <MenuItem value="all">All Marks</MenuItem>
+                <MenuItem value="subject">Subject</MenuItem>
+                <MenuItem value="examType">Exam Type</MenuItem>
+                <MenuItem value="semester">Semester</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
 
           {filterCriteria !== 'all' && (
-            <div className="filter-group">
-              <label>Select {filterCriteria}:</label>
-              <select
-                value={filterValue}
-                onChange={(e) => setFilterValue(e.target.value)}
-              >
-                <option value="">All {filterCriteria}</option>
-                {uniqueValues(filterCriteria).map((value) => (
-                  <option key={value} value={value}>{value}</option>
-                ))}
-              </select>
-            </div>
+            <Grid item xs={12} sm={6} md={4}>
+              <FormControl fullWidth>
+                <InputLabel>Select {filterCriteria}</InputLabel>
+                <Select
+                  value={filterValue}
+                  label={`Select ${filterCriteria}`}
+                  onChange={(e) => setFilterValue(e.target.value)}
+                >
+                  <MenuItem value="">All {filterCriteria}</MenuItem>
+                  {uniqueValues(filterCriteria).map((value) => (
+                    <MenuItem key={value} value={value}>{value}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
           )}
-        </div>
-      </div>
+
+          {filterValue && (
+            <Grid item xs={12} sm={6} md={4}>
+              <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+                <Chip 
+                  label={`Filtered by: ${filterValue}`} 
+                  onDelete={() => setFilterValue('')}
+                  color="primary"
+                  variant="outlined"
+                />
+              </Box>
+            </Grid>
+          )}
+        </Grid>
+      </Paper>
 
       {loading ? (
-        <div className="loading">Loading marks...</div>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 8 }}>
+          <CircularProgress size={60} sx={{ color: '#667eea' }} />
+        </Box>
       ) : (
-        <div className="main-content">
-          <MarksTable marks={filteredMarks} onMarkDeleted={handleMarkDeleted} />
-          <MarksChart marks={filteredMarks} />
-        </div>
+        <Grid container spacing={3}>
+          <Grid item xs={12} lg={8}>
+            <Paper sx={{ p: 3, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: '#2c3e50' }}>
+                Marks Table
+              </Typography>
+              <MarksTable marks={filteredMarks} onMarkDeleted={handleMarkDeleted} />
+            </Paper>
+          </Grid>
+          <Grid item xs={12} lg={4}>
+            <Paper sx={{ p: 3, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: '#2c3e50' }}>
+                Performance Chart
+              </Typography>
+              <MarksChart marks={filteredMarks} />
+            </Paper>
+          </Grid>
+        </Grid>
       )}
-    </div>
+    </Box>
   );
 };
 
