@@ -3,17 +3,23 @@ import {
   Box, Typography, Paper, TextField, Button, MenuItem,
   FormControl, InputLabel, Select, Card, CardContent, 
   Grid, List, ListItem, ListItemButton, IconButton,
-  Fade, Tooltip, Dialog, DialogContent, DialogActions, DialogTitle
+  Fade, Tooltip, Dialog, DialogContent, DialogActions, DialogTitle,
+  Chip, Avatar, Stack, Alert, Snackbar
 } from '@mui/material';
 import {
   Delete as DeleteIcon,
   Description as FileIcon,
   Add as AddIcon,
-  Close as CloseIcon
+  Close as CloseIcon,
+  Notes as NotesIcon,
+  BookOpen,
+  TextSnippet,
+  AttachFile,
+  Download,
+  Folder
 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { getNotes, addTextNote, addFileNote, deleteNote, downloadNote } from '../api/Noteapi';
-import '../styles/NotesPage.css';
 
 const NotesPage = ({ userId }) => {
   const theme = useTheme();

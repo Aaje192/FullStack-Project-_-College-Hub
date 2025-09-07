@@ -11,11 +11,28 @@ import {
   Stack,
   Alert,
   Snackbar,
+  Card,
+  CardContent,
+  Grid,
+  Chip,
+  IconButton,
+  Avatar,
+  LinearProgress
 } from "@mui/material";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import {
+  Assignment,
+  Add,
+  Edit,
+  Delete,
+  Schedule,
+  CheckCircle,
+  AccessTime,
+  Warning
+} from '@mui/icons-material';
 import {
   getTasks,
   addTask,
@@ -143,191 +160,316 @@ const TasksPage = ({ userId }) => {
     }
   };
 
+  const completedTasks = tasks.filter(task => task.status === 'completed').length;
+  const pendingTasks = tasks.filter(task => task.status === 'pending').length;
+  const overdueTasks = tasks.filter(task => 
+    dayjs(task.deadline).isBefore(dayjs()) && task.status !== 'completed'
+  ).length;
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box sx={{ p: 3 }}>
-        <Paper elevation={3} sx={{ p: 3, borderRadius: 2, mb: 3 }}>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mb: 2 }}>
-            <Stack spacing={2}>
-              <TextField
-                label="Title"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                required
-                size="small"
-              />
-              <TextField
-                label="Description"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                required
-                size="small"
-                multiline
-                rows={2}
-              />
-              <DateTimePicker
-                label="Start Date and Time"
-                value={formData.startDateTime ? dayjs(formData.startDateTime) : null}
-                onChange={handleDateChange('startDateTime')}
-                slotProps={{
-                  textField: {
-                    size: "small",
-                    required: true,
-                    fullWidth: true
-                  }
-                }}
-              />
-              <DateTimePicker
-                label="Deadline"
-                value={formData.deadline ? dayjs(formData.deadline) : null}
-                onChange={handleDateChange('deadline')}
-                slotProps={{
-                  textField: {
-                    size: "small",
-                    required: true,
-                    fullWidth: true
-                  }
-                }}
-                minDateTime={formData.startDateTime ? dayjs(formData.startDateTime) : null}
-              />
-              <Button type="submit" variant="contained" color="success">
-                {editingId ? "Update Task" : "Add Task"}
-              </Button>
-              {editingId && (
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={() => {
-                    setEditingId(null);
-                    setFormData({
-                      title: "",
-                      description: "",
-                      startDateTime: null,
-                      deadline: null,
-                    });
+      <Box sx={{ p: 2 }}>
+        {/* Header */}
+        <Box sx={{ mb: 4, textAlign: 'center' }}>
+          <Typography variant="h4" sx={{ 
+            fontWeight: 700, 
+            color: '#2c3e50',
+            mb: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 2
+          }}>
+            <Assignment sx={{ fontSize: '2rem', color: '#667eea' }} />
+            Task Manager
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary">
+            Organize and track your academic tasks and assignments
+          </Typography>
+        </Box>
+
+        {/* Stats Cards */}
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Card sx={{ 
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              boxShadow: '0 4px 20px rgba(102, 126, 234, 0.3)'
+            }}>
+              <CardContent>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Box>
+                    <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                      {tasks.length}
+                    </Typography>
+                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                      Total Tasks
+                    </Typography>
+                  </Box>
+                  <Assignment sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Card sx={{ 
+              background: 'linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%)',
+              color: 'white',
+              boxShadow: '0 4px 20px rgba(76, 175, 80, 0.3)'
+            }}>
+              <CardContent>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Box>
+                    <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                      {completedTasks}
+                    </Typography>
+                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                      Completed
+                    </Typography>
+                  </Box>
+                  <CheckCircle sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Card sx={{ 
+              background: 'linear-gradient(135deg, #FF9800 0%, #F57C00 100%)',
+              color: 'white',
+              boxShadow: '0 4px 20px rgba(255, 152, 0, 0.3)'
+            }}>
+              <CardContent>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Box>
+                    <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                      {pendingTasks}
+                    </Typography>
+                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                      Pending
+                    </Typography>
+                  </Box>
+                  <AccessTime sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Card sx={{ 
+              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              color: 'white',
+              boxShadow: '0 4px 20px rgba(245, 87, 108, 0.3)'
+            }}>
+              <CardContent>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Box>
+                    <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                      {overdueTasks}
+                    </Typography>
+                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                      Overdue
+                    </Typography>
+                  </Box>
+                  <Warning sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+
+        {/* Add Task Form */}
+        <Paper sx={{ p: 3, mb: 3, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+          <Typography variant="h6" sx={{ mb: 3, fontWeight: 600, color: '#2c3e50', display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Add sx={{ color: '#667eea' }} />
+            {editingId ? 'Edit Task' : 'Add New Task'}
+          </Typography>
+          
+          <Box component="form" onSubmit={handleSubmit}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Task Title"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  required
+                  multiline
+                  rows={2}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <DateTimePicker
+                  label="Start Date and Time"
+                  value={formData.startDateTime ? dayjs(formData.startDateTime) : null}
+                  onChange={handleDateChange('startDateTime')}
+                  slotProps={{
+                    textField: {
+                      required: true,
+                      fullWidth: true
+                    }
                   }}
-                >
-                  Cancel Edit
-                </Button>
-              )}
-            </Stack>
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <DateTimePicker
+                  label="Deadline"
+                  value={formData.deadline ? dayjs(formData.deadline) : null}
+                  onChange={handleDateChange('deadline')}
+                  slotProps={{
+                    textField: {
+                      required: true,
+                      fullWidth: true
+                    }
+                  }}
+                  minDateTime={formData.startDateTime ? dayjs(formData.startDateTime) : null}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Stack direction="row" spacing={2}>
+                  <Button 
+                    type="submit" 
+                    variant="contained"
+                    sx={{
+                      px: 4,
+                      py: 1.5,
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      '&:hover': {
+                        background: 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)',
+                      }
+                    }}
+                  >
+                    {editingId ? "Update Task" : "Add Task"}
+                  </Button>
+                  {editingId && (
+                    <Button
+                      variant="outlined"
+                      onClick={() => {
+                        setEditingId(null);
+                        setFormData({
+                          title: "",
+                          description: "",
+                          startDateTime: null,
+                          deadline: null,
+                        });
+                      }}
+                    >
+                      Cancel Edit
+                    </Button>
+                  )}
+                </Stack>
+              </Grid>
+            </Grid>
           </Box>
         </Paper>
 
-        <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
-          Tasks
-        </Typography>
-        
-        <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-          <Box>
-            {tasks.length === 0 ? (
-              <Typography>No tasks available.</Typography>
-            ) : (
-              <List sx={{ width: '100%' }}>
-                {tasks.map((task) => (
-                  <React.Fragment key={task._id}>
-                    <ListItem
-                      alignItems="flex-start"
-                      sx={{
-                        flexDirection: "column",
-                        alignItems: "flex-start",
-                        bgcolor: 'rgba(0, 0, 0, 0.04)',
-                        borderRadius: 2,
-                        mb: 1,
-                        p: 2,
-                        transition: 'all 0.3s ease',
-                        '&:hover': {
-                          bgcolor: 'rgba(0, 0, 0, 0.08)',
-                          transform: 'translateY(-2px)',
-                          boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-                        }
-                      }}
-                    >
-                      <Typography 
-                        variant="subtitle1" 
-                        fontWeight="bold"
-                        sx={{ 
-                          color: 'primary.main',
-                          fontSize: '1.1rem',
-                          mb: 1
-                        }}
-                      >
-                        {task.title}
-                      </Typography>
-                      <Typography 
-                        variant="body2" 
-                        sx={{ 
-                          color: 'text.primary',
-                          mb: 1,
-                          lineHeight: 1.5
-                        }}
-                      >
-                        {task.description}
-                      </Typography>
-                      <Box sx={{ 
-                        display: 'flex', 
-                        gap: 3, 
-                        mb: 1,
-                        color: 'text.secondary',
-                        fontSize: '0.875rem'
-                      }}>
-                        <Typography variant="caption" display="block">
-                          <strong>Start:</strong> {dayjs(task.startDateTime).format('MMM D, YYYY h:mm A')}
+        {/* Tasks List */}
+        <Paper sx={{ p: 3, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+          <Typography variant="h6" sx={{ mb: 3, fontWeight: 600, color: '#2c3e50' }}>
+            Your Tasks
+          </Typography>
+          
+          {tasks.length === 0 ? (
+            <Box sx={{ textAlign: 'center', py: 8 }}>
+              <Assignment sx={{ fontSize: '4rem', color: '#e0e0e0', mb: 2 }} />
+              <Typography color="text.secondary" variant="h6">
+                No tasks available
+              </Typography>
+              <Typography color="text.secondary" variant="body2">
+                Create your first task to get started!
+              </Typography>
+            </Box>
+          ) : (
+            <Grid container spacing={3}>
+              {tasks.map((task) => {
+                const isOverdue = dayjs(task.deadline).isBefore(dayjs()) && task.status !== 'completed';
+                const daysUntilDeadline = dayjs(task.deadline).diff(dayjs(), 'days');
+                
+                return (
+                  <Grid item xs={12} md={6} lg={4} key={task._id}>
+                    <Card sx={{
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      borderLeft: isOverdue ? '4px solid #f5576c' : '4px solid #667eea',
+                      '&:hover': {
+                        transform: 'translateY(-4px)',
+                        boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                        transition: 'all 0.3s ease'
+                      }
+                    }}>
+                      <CardContent sx={{ flexGrow: 1 }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                          <Typography variant="h6" sx={{ fontWeight: 600, color: '#2c3e50' }}>
+                            {task.title}
+                          </Typography>
+                          {isOverdue && (
+                            <Chip
+                              label="Overdue"
+                              color="error"
+                              size="small"
+                              icon={<Warning />}
+                            />
+                          )}
+                        </Box>
+                        
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                          {task.description}
                         </Typography>
-                        <Typography variant="caption" display="block">
-                          <strong>Deadline:</strong> {dayjs(task.deadline).format('MMM D, YYYY h:mm A')}
-                        </Typography>
-                      </Box>
-                      <Stack 
-                        direction="row" 
-                        spacing={1} 
-                        sx={{
-                          mt: 1,
-                          '& .MuiButton-root': {
-                            minWidth: '80px',
-                            textTransform: 'none'
-                          }
-                        }}
-                      >
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          onClick={() => handleEdit(task)}
-                          sx={{
-                            borderColor: 'primary.main',
-                            color: 'primary.main',
-                            '&:hover': {
-                              borderColor: 'primary.dark',
-                              bgcolor: 'primary.light',
-                              color: 'primary.dark'
-                            }
-                          }}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="error"
-                          size="small"
-                          onClick={() => handleDelete(task._id)}
-                          sx={{
-                            bgcolor: 'error.main',
-                            '&:hover': {
-                              bgcolor: 'error.dark'
-                            }
-                          }}
-                        >
-                          Delete
-                        </Button>
-                      </Stack>
-                    </ListItem>
-                  </React.Fragment>
-                ))}
-              </List>
-            )}
-          </Box>
+                        
+                        <Box sx={{ mb: 2 }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                            <Schedule sx={{ fontSize: '1rem', color: '#667eea' }} />
+                            <Typography variant="caption">
+                              Start: {dayjs(task.startDateTime).format('MMM D, h:mm A')}
+                            </Typography>
+                          </Box>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <AccessTime sx={{ fontSize: '1rem', color: isOverdue ? '#f5576c' : '#667eea' }} />
+                            <Typography variant="caption" color={isOverdue ? 'error' : 'text.secondary'}>
+                              Due: {dayjs(task.deadline).format('MMM D, h:mm A')}
+                            </Typography>
+                          </Box>
+                          
+                          {!isOverdue && daysUntilDeadline >= 0 && (
+                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+                              {daysUntilDeadline === 0 ? 'Due today' : `${daysUntilDeadline} days remaining`}
+                            </Typography>
+                          )}
+                        </Box>
+                        
+                        <Stack direction="row" spacing={1} sx={{ mt: 'auto' }}>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleEdit(task)}
+                            sx={{ color: '#667eea' }}
+                          >
+                            <Edit />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleDelete(task._id)}
+                            sx={{ color: '#f5576c' }}
+                          >
+                            <Delete />
+                          </IconButton>
+                        </Stack>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                );
+              })}
+            </Grid>
+          )}
         </Paper>
 
         <Snackbar

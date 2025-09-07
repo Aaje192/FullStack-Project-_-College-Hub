@@ -12,18 +12,22 @@ import {
   Tooltip,
   useTheme,
   Alert,
-  Snackbar
+  Snackbar,
+  Button,
+  Chip
 } from '@mui/material';
 import {
   Email as EmailIcon,
   Phone as PhoneIcon,
   School as SchoolIcon,
   Business as BusinessIcon,
-  Edit as EditIcon
+  Edit as EditIcon,
+  Person as PersonIcon,
+  Badge as BadgeIcon,
+  LocationOn as LocationIcon
 } from '@mui/icons-material';
 import { getProfile, updateProfile } from '../api/Userapi';
 import EditProfileForm from '../components/EditProfileForm';
-import '../styles/Profile.css';
 
 const ProfilePage = ({ userId }) => {
   const [profile, setProfile] = useState(null);
@@ -147,128 +151,257 @@ const ProfilePage = ({ userId }) => {
   );
 
   return (
-    <Box className="profile-container">
-      <Paper elevation={3} sx={{ p: 4, borderRadius: 2, mb: 4 }}>
-        {/* Header Section */}
-        <Paper 
-          elevation={0}
+    <Box sx={{ p: 2 }}>
+      {/* Header */}
+      <Box sx={{ mb: 4, textAlign: 'center' }}>
+        <Typography variant="h4" sx={{ 
+          fontWeight: 700, 
+          color: '#2c3e50',
+          mb: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 2
+        }}>
+          <PersonIcon sx={{ fontSize: '2rem', color: '#667eea' }} />
+          Student Profile
+        </Typography>
+        <Typography variant="subtitle1" color="text.secondary">
+          Manage your personal information and academic details
+        </Typography>
+      </Box>
+
+      {/* Profile Header Card */}
+      <Paper sx={{ 
+        p: 4, 
+        mb: 4, 
+        borderRadius: 3,
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        color: 'white',
+        boxShadow: '0 8px 32px rgba(102, 126, 234, 0.3)',
+        position: 'relative'
+      }}>
+        <Button
+          onClick={handleEditClick}
+          variant="contained"
+          startIcon={<EditIcon />}
           sx={{ 
-            p: 4, 
-            mb: 4, 
-            borderRadius: 3,
-            background: 'rgba(255, 255, 255, 0.9)',
+            position: 'absolute', 
+            right: 20, 
+            top: 20,
+            bgcolor: 'rgba(255,255,255,0.2)',
+            color: 'white',
             backdropFilter: 'blur(10px)',
-            position: 'relative'
+            '&:hover': {
+              bgcolor: 'rgba(255,255,255,0.3)'
+            }
           }}
         >
-          <Tooltip title="Edit Profile" placement="left">
-            <IconButton 
-              onClick={handleEditClick}
-              sx={{ 
-                position: 'absolute', 
-                right: 20, 
-                top: 20,
-                backgroundColor: theme.palette.primary.main,
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: theme.palette.primary.dark
-                }
-              }}
-            >
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
+          Edit Profile
+        </Button>
 
-          <Box sx={{ 
-            display: 'flex', 
-            flexDirection: { xs: 'column', sm: 'row' }, 
-            alignItems: 'center',
-            gap: 4
-          }}>
-            <Avatar 
-              sx={{ 
-                width: 120, 
-                height: 120,
-                bgcolor: theme.palette.primary.main,
-                fontSize: '3rem',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
-              }}
-            >
-              {profile.name?.split(' ').map(n => n[0]).join('')}
-            </Avatar>
-            <Box>
-              <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-                {profile.name}
-              </Typography>
-              <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
-                {profile.userType === 'student' ? 'Student' : 'Staff'} • {profile.department}
-              </Typography>
-              <Box sx={{ 
-                display: 'flex', 
-                gap: 2,
-                flexWrap: 'wrap'
-              }}>
-                {profile.year && (
-                  <Typography variant="body1" color="text.secondary">
-                    Year {profile.year}
-                  </Typography>
-                )}
-                {profile.branch && (
-                  <Typography variant="body1" color="text.secondary">
-                    Branch {profile.branch}
-                  </Typography>
-                )}
-                {profile.course && (
-                  <Typography variant="body1" color="text.secondary">
-                    {profile.course}
-                  </Typography>
-                )}
-              </Box>
+        <Box sx={{ 
+          display: 'flex', 
+          flexDirection: { xs: 'column', sm: 'row' }, 
+          alignItems: 'center',
+          gap: 4
+        }}>
+          <Avatar 
+            sx={{ 
+              width: 120, 
+              height: 120,
+              bgcolor: 'rgba(255,255,255,0.2)',
+              fontSize: '3rem',
+              fontWeight: 700,
+              boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
+              border: '4px solid rgba(255,255,255,0.3)'
+            }}
+          >
+            {profile.username?.charAt(0).toUpperCase()}
+          </Avatar>
+          <Box sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
+            <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+              {profile.username}
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap', justifyContent: { xs: 'center', sm: 'flex-start' } }}>
+              <Chip 
+                label={profile.userType === 'student' ? 'Student' : 'Staff'} 
+                sx={{ 
+                  bgcolor: 'rgba(255,255,255,0.2)', 
+                  color: 'white',
+                  fontWeight: 600
+                }} 
+              />
+              <Chip 
+                label={profile.department} 
+                sx={{ 
+                  bgcolor: 'rgba(255,255,255,0.2)', 
+                  color: 'white',
+                  fontWeight: 600
+                }} 
+              />
+            </Box>
+            <Box sx={{ 
+              display: 'flex', 
+              gap: 3,
+              flexWrap: 'wrap',
+              justifyContent: { xs: 'center', sm: 'flex-start' }
+            }}>
+              {profile.year && (
+                <Typography variant="body1" sx={{ opacity: 0.9 }}>
+                  Year {profile.year}
+                </Typography>
+              )}
+              {profile.branch && (
+                <Typography variant="body1" sx={{ opacity: 0.9 }}>
+                  {profile.branch}
+                </Typography>
+              )}
+              {profile.course && (
+                <Typography variant="body1" sx={{ opacity: 0.9 }}>
+                  {profile.course}
+                </Typography>
+              )}
             </Box>
           </Box>
-        </Paper>
-
-        {/* Info Cards */}
-        <Grid 
-          container 
-          spacing={3} 
-          sx={{ 
-            justifyContent: 'center',
-            maxWidth: '1200px',
-            mx: 'auto',
-            px: 2
-          }}
-        >
-          <Grid item xs={12} sm={6} md={3}>
-            <InfoCard 
-              icon={<EmailIcon />}
-              title="Email"
-              value={profile.email}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <InfoCard 
-              icon={<PhoneIcon />}
-              title="Mobile"
-              value={profile.mobile}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <InfoCard 
-              icon={<SchoolIcon />}
-              title="Department"
-              value={profile.department}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <InfoCard 
-              icon={<BusinessIcon />}
-              title="ID"
-              value={profile.id}
-            />
-          </Grid>
-        </Grid>
+        </Box>
       </Paper>
+
+      {/* Info Cards */}
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6}>
+          <Card sx={{ 
+            height: '100%',
+            borderRadius: 3,
+            boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+              transition: 'all 0.3s ease'
+            }
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Avatar sx={{ bgcolor: '#667eea', mr: 2 }}>
+                  <EmailIcon />
+                </Avatar>
+                <Typography variant="h6" sx={{ fontWeight: 600, color: '#2c3e50' }}>
+                  Contact Information
+                </Typography>
+              </Box>
+              <Box sx={{ ml: 7 }}>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                  Email Address
+                </Typography>
+                <Typography variant="body1" sx={{ fontWeight: 500, mb: 2 }}>
+                  {profile.email}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                  Mobile Number
+                </Typography>
+                <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                  {profile.mobile}
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <Card sx={{ 
+            height: '100%',
+            borderRadius: 3,
+            boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+              transition: 'all 0.3s ease'
+            }
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Avatar sx={{ bgcolor: '#4CAF50', mr: 2 }}>
+                  <SchoolIcon />
+                </Avatar>
+                <Typography variant="h6" sx={{ fontWeight: 600, color: '#2c3e50' }}>
+                  Academic Details
+                </Typography>
+              </Box>
+              <Box sx={{ ml: 7 }}>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                  Student ID
+                </Typography>
+                <Typography variant="body1" sx={{ fontWeight: 500, mb: 2 }}>
+                  {profile.id}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                  Department
+                </Typography>
+                <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                  {profile.department}
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {(profile.year || profile.branch || profile.course) && (
+          <Grid item xs={12}>
+            <Card sx={{ 
+              borderRadius: 3,
+              boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+              '&:hover': {
+                transform: 'translateY(-4px)',
+                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                transition: 'all 0.3s ease'
+              }
+            }}>
+              <CardContent sx={{ p: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                  <Avatar sx={{ bgcolor: '#FF9800', mr: 2 }}>
+                    <BadgeIcon />
+                  </Avatar>
+                  <Typography variant="h6" sx={{ fontWeight: 600, color: '#2c3e50' }}>
+                    Course Information
+                  </Typography>
+                </Box>
+                <Grid container spacing={3} sx={{ ml: 7 }}>
+                  {profile.year && (
+                    <Grid item xs={12} sm={4}>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                        Academic Year
+                      </Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                        Year {profile.year}
+                      </Typography>
+                    </Grid>
+                  )}
+                  {profile.branch && (
+                    <Grid item xs={12} sm={4}>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                        Branch
+                      </Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                        {profile.branch}
+                      </Typography>
+                    </Grid>
+                  )}
+                  {profile.course && (
+                    <Grid item xs={12} sm={4}>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                        Course
+                      </Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                        {profile.course}
+                      </Typography>
+                    </Grid>
+                  )}
+                </Grid>
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
+      </Grid>
 
       {/* Edit Profile Dialog */}
       <EditProfileForm
