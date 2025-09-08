@@ -81,35 +81,37 @@ const ChatForumsPage = ({ userId }) => {
   };
 
   return (
-    <Box sx={{ p: 2, height: 'calc(100vh - 100px)', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ p: { xs: 1, md: 2 }, height: 'calc(100vh - 100px)', display: 'flex', flexDirection: 'column' }}>
       {/* Header */}
       <Paper sx={{ 
-        p: 3, 
+        p: { xs: 2, md: 3 }, 
         mb: 2, 
         borderRadius: 3,
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         color: 'white',
         boxShadow: '0 4px 20px rgba(102, 126, 234, 0.3)'
       }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.2)', width: 48, height: 48 }}>
-            <Forum />
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, md: 2 }, flexWrap: 'wrap' }}>
+          <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.2)', width: { xs: 40, md: 48 }, height: { xs: 40, md: 48 } }}>
+            <Forum sx={{ fontSize: { xs: '1.2rem', md: '1.5rem' } }} />
           </Avatar>
-          <Box>
-            <Typography variant="h5" sx={{ fontWeight: 700 }}>
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography variant={{ xs: 'h6', md: 'h5' }} sx={{ fontWeight: 700 }}>
               Chat Forum
             </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.9 }}>
+            <Typography variant={{ xs: 'caption', md: 'body2' }} sx={{ opacity: 0.9 }}>
               Connect and discuss with your classmates
             </Typography>
           </Box>
-          <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
+          <Box sx={{ display: 'flex', gap: 1 }}>
             <Chip 
               label={`${messages.length} messages`} 
+              size="small"
               sx={{ 
                 bgcolor: 'rgba(255,255,255,0.2)', 
                 color: 'white',
-                fontWeight: 600
+                fontWeight: 600,
+                fontSize: { xs: '0.75rem', md: '0.875rem' }
               }} 
             />
           </Box>
@@ -154,12 +156,13 @@ const ChatForumsPage = ({ userId }) => {
                   }}
                 >
                   <Avatar 
-                    sx={{ 
+                    sx={{
                       bgcolor: msg.senderId === userId ? '#667eea' : '#4CAF50',
-                      mr: msg.senderId === userId ? 0 : 2,
-                      ml: msg.senderId === userId ? 2 : 0,
-                      width: 40,
-                      height: 40,
+                      mr: msg.senderId === userId ? 0 : { xs: 1, md: 2 },
+                      ml: msg.senderId === userId ? { xs: 1, md: 2 } : 0,
+                      width: { xs: 32, md: 40 },
+                      height: { xs: 32, md: 40 },
+                      fontSize: { xs: '0.875rem', md: '1rem' },
                       fontWeight: 600,
                       boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
                     }}
@@ -168,7 +171,7 @@ const ChatForumsPage = ({ userId }) => {
                   </Avatar>
                   <Card
                     sx={{
-                      maxWidth: '70%',
+                      maxWidth: { xs: '85%', md: '70%' },
                       bgcolor: msg.senderId === userId ? '#667eea' : '#ffffff',
                       color: msg.senderId === userId ? 'white' : '#2c3e50',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
@@ -226,11 +229,11 @@ const ChatForumsPage = ({ userId }) => {
         component="form" 
         onSubmit={handleSendMessage}
         sx={{ 
-          p: 2, 
+          p: { xs: 1.5, md: 2 }, 
           mt: 2,
           display: 'flex', 
           alignItems: 'center', 
-          gap: 2,
+          gap: { xs: 1, md: 2 },
           borderRadius: 3,
           boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
         }}

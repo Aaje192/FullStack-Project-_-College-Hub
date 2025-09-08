@@ -82,41 +82,43 @@ function AttendancePage({ userId }) {
   return (
     <Box sx={{ p: 2 }}>
       {/* Header */}
-      <Box sx={{ mb: 4, textAlign: 'center' }}>
-        <Typography variant="h4" sx={{ 
+      <Box sx={{ mb: { xs: 2, md: 4 }, textAlign: 'center' }}>
+        <Typography variant={{ xs: 'h5', md: 'h4' }} sx={{ 
           fontWeight: 700, 
           color: '#2c3e50',
           mb: 1,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 2
+          gap: { xs: 1, md: 2 },
+          flexDirection: { xs: 'column', sm: 'row' }
         }}>
-          <CheckCircle sx={{ fontSize: '2rem', color: '#667eea' }} />
+          <CheckCircle sx={{ fontSize: { xs: '1.5rem', md: '2rem' }, color: '#667eea' }} />
           Attendance Tracker
         </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
+        <Typography variant={{ xs: 'body2', md: 'subtitle1' }} color="text.secondary">
           Monitor your class attendance and academic presence
         </Typography>
       </Box>
 
       {/* Attendance Form */}
-      <Paper sx={{ p: 3, mb: 3, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
-        <Typography variant="h6" sx={{ mb: 3, fontWeight: 600, color: '#2c3e50' }}>
+      <Paper sx={{ p: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 }, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+        <Typography variant={{ xs: 'subtitle1', md: 'h6' }} sx={{ mb: { xs: 2, md: 3 }, fontWeight: 600, color: '#2c3e50' }}>
           Mark Attendance
         </Typography>
         
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+        <Grid container spacing={{ xs: 2, md: 3 }}>
+          <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               label="Paper/Subject"
               value={paper}
               onChange={(e) => setPaper(e.target.value)}
               placeholder="Enter paper name"
+              size="small"
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               type="date"
@@ -124,19 +126,21 @@ function AttendancePage({ userId }) {
               value={date}
               onChange={(e) => setDate(e.target.value)}
               InputLabelProps={{ shrink: true }}
+              size="small"
             />
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
               label="Hour"
               value={hour}
               onChange={(e) => setHour(e.target.value)}
               placeholder="Enter hour"
+              size="small"
             />
           </Grid>
-          <Grid item xs={12} md={4}>
-            <FormControl fullWidth>
+          <Grid item xs={12} sm={4}>
+            <FormControl fullWidth size="small">
               <InputLabel>Attendance Status</InputLabel>
               <Select
                 value={status}
@@ -149,7 +153,7 @@ function AttendancePage({ userId }) {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
               type="number"
@@ -158,6 +162,7 @@ function AttendancePage({ userId }) {
               onChange={(e) => setTotalHours(e.target.value)}
               placeholder="Enter total hours"
               inputProps={{ min: 0 }}
+              size="small"
             />
           </Grid>
           <Grid item xs={12}>

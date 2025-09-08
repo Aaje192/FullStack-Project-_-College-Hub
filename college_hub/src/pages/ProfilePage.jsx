@@ -103,7 +103,7 @@ const ProfilePage = ({ userId }) => {
       background: 'rgba(255, 255, 255, 0.8)',
       backdropFilter: 'blur(10px)',
       transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-      minWidth: '240px',
+      minWidth: { xs: '160px', md: '240px' },
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -118,26 +118,26 @@ const ProfilePage = ({ userId }) => {
         flexDirection: 'column', 
         alignItems: 'center',
         textAlign: 'center',
-        p: 3,
+        p: { xs: 2, md: 3 },
         width: '100%'
       }}>
         {React.cloneElement(icon, { 
           sx: { 
-            fontSize: 40, 
+            fontSize: { xs: 28, md: 40 }, 
             color: theme.palette.primary.main,
-            mb: 2
+            mb: { xs: 1, md: 2 }
           } 
         })}
         <Typography 
-          variant="subtitle2" 
+          variant={{ xs: 'caption', md: 'subtitle2' }}
           color="text.secondary" 
           gutterBottom 
-          sx={{ fontSize: '0.875rem', mb: 1 }}
+          sx={{ fontSize: { xs: '0.75rem', md: '0.875rem' }, mb: 1 }}
         >
           {title}
         </Typography>
         <Typography 
-          variant="h6" 
+          variant={{ xs: 'body2', md: 'h6' }}
           sx={{ 
             fontWeight: 'medium',
             wordBreak: 'break-word',
@@ -151,30 +151,31 @@ const ProfilePage = ({ userId }) => {
   );
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: { xs: 1, md: 2 } }}>
       {/* Header */}
-      <Box sx={{ mb: 4, textAlign: 'center' }}>
-        <Typography variant="h4" sx={{ 
+      <Box sx={{ mb: { xs: 2, md: 4 }, textAlign: 'center' }}>
+        <Typography variant={{ xs: 'h5', md: 'h4' }} sx={{ 
           fontWeight: 700, 
           color: '#2c3e50',
           mb: 1,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 2
+          gap: { xs: 1, md: 2 },
+          flexDirection: { xs: 'column', sm: 'row' }
         }}>
-          <PersonIcon sx={{ fontSize: '2rem', color: '#667eea' }} />
+          <PersonIcon sx={{ fontSize: { xs: '1.5rem', md: '2rem' }, color: '#667eea' }} />
           Student Profile
         </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
+        <Typography variant={{ xs: 'body2', md: 'subtitle1' }} color="text.secondary">
           Manage your personal information and academic details
         </Typography>
       </Box>
 
       {/* Profile Header Card */}
       <Paper sx={{ 
-        p: 4, 
-        mb: 4, 
+        p: { xs: 3, md: 4 }, 
+        mb: { xs: 2, md: 4 }, 
         borderRadius: 3,
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         color: 'white',
@@ -185,13 +186,15 @@ const ProfilePage = ({ userId }) => {
           onClick={handleEditClick}
           variant="contained"
           startIcon={<EditIcon />}
+          size="small"
           sx={{ 
             position: 'absolute', 
-            right: 20, 
-            top: 20,
+            right: { xs: 16, md: 20 }, 
+            top: { xs: 16, md: 20 },
             bgcolor: 'rgba(255,255,255,0.2)',
             color: 'white',
             backdropFilter: 'blur(10px)',
+            fontSize: { xs: '0.75rem', md: '0.875rem' },
             '&:hover': {
               bgcolor: 'rgba(255,255,255,0.3)'
             }
@@ -204,14 +207,14 @@ const ProfilePage = ({ userId }) => {
           display: 'flex', 
           flexDirection: { xs: 'column', sm: 'row' }, 
           alignItems: 'center',
-          gap: 4
+          gap: { xs: 2, md: 4 }
         }}>
           <Avatar 
             sx={{ 
-              width: 120, 
-              height: 120,
+              width: { xs: 80, md: 120 }, 
+              height: { xs: 80, md: 120 },
               bgcolor: 'rgba(255,255,255,0.2)',
-              fontSize: '3rem',
+              fontSize: { xs: '2rem', md: '3rem' },
               fontWeight: 700,
               boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
               border: '4px solid rgba(255,255,255,0.3)'
@@ -268,7 +271,7 @@ const ProfilePage = ({ userId }) => {
       </Paper>
 
       {/* Info Cards */}
-      <Grid container spacing={3}>
+      <Grid container spacing={{ xs: 2, md: 3 }}>
         <Grid item xs={12} sm={6}>
           <Card sx={{ 
             height: '100%',
@@ -280,16 +283,16 @@ const ProfilePage = ({ userId }) => {
               transition: 'all 0.3s ease'
             }
           }}>
-            <CardContent sx={{ p: 3 }}>
+            <CardContent sx={{ p: { xs: 2, md: 3 } }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Avatar sx={{ bgcolor: '#667eea', mr: 2 }}>
-                  <EmailIcon />
+                <Avatar sx={{ bgcolor: '#667eea', mr: 2, width: { xs: 32, md: 40 }, height: { xs: 32, md: 40 } }}>
+                  <EmailIcon sx={{ fontSize: { xs: '1rem', md: '1.2rem' } }} />
                 </Avatar>
-                <Typography variant="h6" sx={{ fontWeight: 600, color: '#2c3e50' }}>
+                <Typography variant={{ xs: 'subtitle1', md: 'h6' }} sx={{ fontWeight: 600, color: '#2c3e50' }}>
                   Contact Information
                 </Typography>
               </Box>
-              <Box sx={{ ml: 7 }}>
+              <Box sx={{ ml: { xs: 5, md: 7 } }}>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                   Email Address
                 </Typography>
@@ -318,16 +321,16 @@ const ProfilePage = ({ userId }) => {
               transition: 'all 0.3s ease'
             }
           }}>
-            <CardContent sx={{ p: 3 }}>
+            <CardContent sx={{ p: { xs: 2, md: 3 } }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Avatar sx={{ bgcolor: '#4CAF50', mr: 2 }}>
-                  <SchoolIcon />
+                <Avatar sx={{ bgcolor: '#4CAF50', mr: 2, width: { xs: 32, md: 40 }, height: { xs: 32, md: 40 } }}>
+                  <SchoolIcon sx={{ fontSize: { xs: '1rem', md: '1.2rem' } }} />
                 </Avatar>
-                <Typography variant="h6" sx={{ fontWeight: 600, color: '#2c3e50' }}>
+                <Typography variant={{ xs: 'subtitle1', md: 'h6' }} sx={{ fontWeight: 600, color: '#2c3e50' }}>
                   Academic Details
                 </Typography>
               </Box>
-              <Box sx={{ ml: 7 }}>
+              <Box sx={{ ml: { xs: 5, md: 7 } }}>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                   Student ID
                 </Typography>
