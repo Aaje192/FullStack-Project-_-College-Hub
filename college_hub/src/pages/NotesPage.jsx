@@ -12,7 +12,7 @@ import {
   Add as AddIcon,
   Close as CloseIcon,
   Notes as NotesIcon,
-  BookOpen,
+  MenuBook,
   TextSnippet,
   AttachFile,
   Download,
@@ -231,15 +231,15 @@ const NotesPage = ({ userId }) => {
   );
 
   return (
-    <Box className="notes-page-root">
-      <Typography variant="h4" gutterBottom sx={{ mb: 4, fontWeight: "bold", textAlign: "center" }}>
+    <Box className="notes-page-root" sx={{ p: { xs: 1, md: 2 } }}>
+      <Typography variant={{ xs: 'h5', md: 'h4' }} gutterBottom sx={{ mb: { xs: 2, md: 4 }, fontWeight: "bold", textAlign: "center" }}>
         Notes
       </Typography>
-      <Grid container className="notes-grid" spacing={3}>
+      <Grid container className="notes-grid" spacing={{ xs: 2, md: 3 }}>
         {/* Form Section */}
         <Grid item xs={12} md={6}>
-          <Paper className="notes-form-section" elevation={0}>
-            <Typography variant="h5">
+          <Paper className="notes-form-section" elevation={0} sx={{ p: { xs: 2, md: 3 } }}>
+            <Typography variant={{ xs: 'h6', md: 'h5' }}>
               Add New Note
             </Typography>
             <form onSubmit={handleSubmit}>
@@ -325,11 +325,11 @@ const NotesPage = ({ userId }) => {
 
         {/* Notes Display Section */}
         <Grid item xs={12} md={6}>
-          <Paper className="notes-display-section" elevation={0}>
-            <Typography variant="h5">
+          <Paper className="notes-display-section" elevation={0} sx={{ p: { xs: 2, md: 3 } }}>
+            <Typography variant={{ xs: 'h6', md: 'h5' }}>
               Your Notes
             </Typography>
-            <Grid container spacing={2}>
+            <Grid container spacing={{ xs: 1, md: 2 }}>
               {subjects.map((subjectName) => (
                 <Grid item xs={12} sm={6} md={4} key={subjectName}>
                   <Card

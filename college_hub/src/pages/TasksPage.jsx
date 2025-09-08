@@ -169,107 +169,106 @@ const TasksPage = ({ userId }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box sx={{ p: 2 }}>
-        {/* Header */}
-        <Box sx={{ mb: 4, textAlign: 'center' }}>
-          <Typography variant="h4" sx={{ 
-            fontWeight: 700, 
-            color: '#2c3e50',
-            mb: 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 2
-          }}>
-            <Assignment sx={{ fontSize: '2rem', color: '#667eea' }} />
-            Task Manager
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            Organize and track your academic tasks and assignments
-          </Typography>
-        </Box>
-
-        {/* Stats Cards */}
-        <Grid container spacing={3} sx={{ mb: 4 }}>
-          <Grid item xs={12} sm={6} md={3}>
+      {/* Header */}
+      <Box sx={{ mb: { xs: 2, md: 4 }, textAlign: 'center' }}>
+        <Typography variant={{ xs: 'h5', md: 'h4' }} sx={{ 
+          fontWeight: 700, 
+          color: '#2c3e50',
+          mb: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: { xs: 1, md: 2 },
+          flexDirection: { xs: 'column', sm: 'row' }
+        }}>
+          <Assignment sx={{ fontSize: { xs: '1.5rem', md: '2rem' }, color: '#667eea' }} />
+          Task Manager
+        </Typography>
+        <Typography variant={{ xs: 'body2', md: 'subtitle1' }} color="text.secondary">
+          Organize and track your academic tasks and assignments
+        </Typography>
+      </Box>        {/* Stats Cards */}
+        <Grid container spacing={{ xs: 2, md: 3 }} sx={{ mb: { xs: 2, md: 4 } }}>
+          <Grid item xs={6} sm={6} md={3}>
             <Card sx={{ 
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               color: 'white',
               boxShadow: '0 4px 20px rgba(102, 126, 234, 0.3)'
             }}>
-              <CardContent>
+              <CardContent sx={{ p: { xs: 2, md: 3 } }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Box>
-                    <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                    <Typography variant={{ xs: 'h6', md: 'h4' }} sx={{ fontWeight: 700 }}>
                       {tasks.length}
                     </Typography>
-                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                    <Typography variant={{ xs: 'caption', md: 'body2' }} sx={{ opacity: 0.9 }}>
                       Total Tasks
                     </Typography>
                   </Box>
-                  <Assignment sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+                  <Assignment sx={{ fontSize: { xs: '1.5rem', md: '2.5rem' }, opacity: 0.8 }} />
                 </Box>
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={6} sm={6} md={3}>
             <Card sx={{ 
               background: 'linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%)',
               color: 'white',
               boxShadow: '0 4px 20px rgba(76, 175, 80, 0.3)'
             }}>
-              <CardContent>
+              <CardContent sx={{ p: { xs: 2, md: 3 } }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Box>
-                    <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                    <Typography variant={{ xs: 'h6', md: 'h4' }} sx={{ fontWeight: 700 }}>
                       {completedTasks}
                     </Typography>
-                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                    <Typography variant={{ xs: 'caption', md: 'body2' }} sx={{ opacity: 0.9 }}>
                       Completed
                     </Typography>
                   </Box>
-                  <CheckCircle sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+                  <CheckCircle sx={{ fontSize: { xs: '1.5rem', md: '2.5rem' }, opacity: 0.8 }} />
                 </Box>
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={6} sm={6} md={3}>
             <Card sx={{ 
               background: 'linear-gradient(135deg, #FF9800 0%, #F57C00 100%)',
               color: 'white',
               boxShadow: '0 4px 20px rgba(255, 152, 0, 0.3)'
             }}>
-              <CardContent>
+              <CardContent sx={{ p: { xs: 2, md: 3 } }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Box>
-                    <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                    <Typography variant={{ xs: 'h6', md: 'h4' }} sx={{ fontWeight: 700 }}>
                       {pendingTasks}
                     </Typography>
-                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                    <Typography variant={{ xs: 'caption', md: 'body2' }} sx={{ opacity: 0.9 }}>
                       Pending
                     </Typography>
                   </Box>
-                  <AccessTime sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+                  <AccessTime sx={{ fontSize: { xs: '1.5rem', md: '2.5rem' }, opacity: 0.8 }} />
                 </Box>
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={6} sm={6} md={3}>
             <Card sx={{ 
               background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
               color: 'white',
               boxShadow: '0 4px 20px rgba(245, 87, 108, 0.3)'
             }}>
-              <CardContent>
+              <CardContent sx={{ p: { xs: 2, md: 3 } }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Box>
-                    <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                    <Typography variant={{ xs: 'h6', md: 'h4' }} sx={{ fontWeight: 700 }}>
                       {overdueTasks}
                     </Typography>
-                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                    <Typography variant={{ xs: 'caption', md: 'body2' }} sx={{ opacity: 0.9 }}>
                       Overdue
                     </Typography>
                   </Box>
-                  <Warning sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+                  <Warning sx={{ fontSize: { xs: '1.5rem', md: '2.5rem' }, opacity: 0.8 }} />
                 </Box>
               </CardContent>
             </Card>
@@ -277,14 +276,14 @@ const TasksPage = ({ userId }) => {
         </Grid>
 
         {/* Add Task Form */}
-        <Paper sx={{ p: 3, mb: 3, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
-          <Typography variant="h6" sx={{ mb: 3, fontWeight: 600, color: '#2c3e50', display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Paper sx={{ p: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 }, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+          <Typography variant={{ xs: 'subtitle1', md: 'h6' }} sx={{ mb: { xs: 2, md: 3 }, fontWeight: 600, color: '#2c3e50', display: 'flex', alignItems: 'center', gap: 1 }}>
             <Add sx={{ color: '#667eea' }} />
             {editingId ? 'Edit Task' : 'Add New Task'}
           </Typography>
           
           <Box component="form" onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
+            <Grid container spacing={{ xs: 2, md: 3 }}>
               <Grid item xs={12} md={6}>
                 <TextField
                   fullWidth
@@ -373,8 +372,8 @@ const TasksPage = ({ userId }) => {
         </Paper>
 
         {/* Tasks List */}
-        <Paper sx={{ p: 3, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
-          <Typography variant="h6" sx={{ mb: 3, fontWeight: 600, color: '#2c3e50' }}>
+        <Paper sx={{ p: { xs: 2, md: 3 }, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+          <Typography variant={{ xs: 'subtitle1', md: 'h6' }} sx={{ mb: { xs: 2, md: 3 }, fontWeight: 600, color: '#2c3e50' }}>
             Your Tasks
           </Typography>
           

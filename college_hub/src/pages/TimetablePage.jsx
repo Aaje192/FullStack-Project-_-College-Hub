@@ -23,7 +23,7 @@ import {
   Schedule,
   School,
   AccessTime,
-  BookOpen,
+  MenuBook,
   Coffee
 } from "@mui/icons-material";
 
@@ -147,108 +147,109 @@ function TimetablePage({ userId }) {
   };
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: { xs: 1, md: 2 } }}>
       {/* Header */}
-      <Box sx={{ mb: 4, textAlign: 'center' }}>
-        <Typography variant="h4" sx={{ 
+      <Box sx={{ mb: { xs: 2, md: 4 }, textAlign: 'center' }}>
+        <Typography variant={{ xs: 'h5', md: 'h4' }} sx={{ 
           fontWeight: 700, 
           color: '#2c3e50',
           mb: 1,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 2
+          gap: { xs: 1, md: 2 },
+          flexDirection: { xs: 'column', sm: 'row' }
         }}>
-          <Schedule sx={{ fontSize: '2rem', color: '#667eea' }} />
+          <Schedule sx={{ fontSize: { xs: '1.5rem', md: '2rem' }, color: '#667eea' }} />
           Class Timetable
         </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
+        <Typography variant={{ xs: 'body2', md: 'subtitle1' }} color="text.secondary">
           Your weekly class schedule and academic calendar
         </Typography>
       </Box>
 
       {/* Stats Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
+      <Grid container spacing={{ xs: 2, md: 3 }} sx={{ mb: { xs: 2, md: 4 } }}>
+        <Grid item xs={6} sm={6} md={3}>
           <Card sx={{ 
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             color: 'white',
             boxShadow: '0 4px 20px rgba(102, 126, 234, 0.3)'
           }}>
-            <CardContent>
+            <CardContent sx={{ p: { xs: 2, md: 3 } }}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
-                  <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                  <Typography variant={{ xs: 'h6', md: 'h4' }} sx={{ fontWeight: 700 }}>
                     {defaultPeriods * defaultDays.length}
                   </Typography>
-                  <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                  <Typography variant={{ xs: 'caption', md: 'body2' }} sx={{ opacity: 0.9 }}>
                     Total Periods
                   </Typography>
                 </Box>
-                <AccessTime sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+                <AccessTime sx={{ fontSize: { xs: '1.5rem', md: '2.5rem' }, opacity: 0.8 }} />
               </Box>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={6} sm={6} md={3}>
           <Card sx={{ 
             background: 'linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%)',
             color: 'white',
             boxShadow: '0 4px 20px rgba(76, 175, 80, 0.3)'
           }}>
-            <CardContent>
+            <CardContent sx={{ p: { xs: 2, md: 3 } }}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
-                  <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                  <Typography variant={{ xs: 'h6', md: 'h4' }} sx={{ fontWeight: 700 }}>
                     {totalSubjects}
                   </Typography>
-                  <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                  <Typography variant={{ xs: 'caption', md: 'body2' }} sx={{ opacity: 0.9 }}>
                     Classes Scheduled
                   </Typography>
                 </Box>
-                <School sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+                <School sx={{ fontSize: { xs: '1.5rem', md: '2.5rem' }, opacity: 0.8 }} />
               </Box>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={6} sm={6} md={3}>
           <Card sx={{ 
             background: 'linear-gradient(135deg, #FF9800 0%, #F57C00 100%)',
             color: 'white',
             boxShadow: '0 4px 20px rgba(255, 152, 0, 0.3)'
           }}>
-            <CardContent>
+            <CardContent sx={{ p: { xs: 2, md: 3 } }}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
-                  <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                  <Typography variant={{ xs: 'h6', md: 'h4' }} sx={{ fontWeight: 700 }}>
                     {uniqueSubjects}
                   </Typography>
-                  <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                  <Typography variant={{ xs: 'caption', md: 'body2' }} sx={{ opacity: 0.9 }}>
                     Unique Subjects
                   </Typography>
                 </Box>
-                <BookOpen sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+                <MenuBook sx={{ fontSize: { xs: '1.5rem', md: '2.5rem' }, opacity: 0.8 }} />
               </Box>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={6} sm={6} md={3}>
           <Card sx={{ 
             background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
             color: 'white',
             boxShadow: '0 4px 20px rgba(245, 87, 108, 0.3)'
           }}>
-            <CardContent>
+            <CardContent sx={{ p: { xs: 2, md: 3 } }}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
-                  <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                  <Typography variant={{ xs: 'h6', md: 'h4' }} sx={{ fontWeight: 700 }}>
                     {defaultDays.length}
                   </Typography>
-                  <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                  <Typography variant={{ xs: 'caption', md: 'body2' }} sx={{ opacity: 0.9 }}>
                     Working Days
                   </Typography>
                 </Box>
-                <Coffee sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+                <Coffee sx={{ fontSize: { xs: '1.5rem', md: '2.5rem' }, opacity: 0.8 }} />
               </Box>
             </CardContent>
           </Card>
@@ -263,15 +264,27 @@ function TimetablePage({ userId }) {
 
       {/* Timetable */}
       <Paper sx={{ borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
-        <Box sx={{ p: 3, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
-          <Typography variant="h6" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box sx={{ p: { xs: 2, md: 3 }, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
+          <Typography variant={{ xs: 'subtitle1', md: 'h6' }} sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
             <Schedule />
             Weekly Schedule
           </Typography>
         </Box>
         
-        <TableContainer>
-          <Table sx={{ minWidth: 650 }}>
+        <TableContainer sx={{ 
+          overflowX: 'auto',
+          '&::-webkit-scrollbar': {
+            height: 8,
+          },
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: '#f1f1f1',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#667eea',
+            borderRadius: 4,
+          }
+        }}>
+          <Table sx={{ minWidth: { xs: 800, md: 650 } }}>
             <TableHead>
               <TableRow sx={{ bgcolor: '#f8f9fa' }}>
                 <TableCell sx={{ 

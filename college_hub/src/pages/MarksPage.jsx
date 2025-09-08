@@ -87,43 +87,44 @@ const MarksPage = ({ userId }) => {
   return (
     <Box sx={{ p: 2 }}>
       {/* Header */}
-      <Box sx={{ mb: 4, textAlign: 'center' }}>
-        <Typography variant="h4" sx={{ 
+      <Box sx={{ mb: { xs: 2, md: 4 }, textAlign: 'center' }}>
+        <Typography variant={{ xs: 'h5', md: 'h4' }} sx={{ 
           fontWeight: 700, 
           color: '#2c3e50',
           mb: 1,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 2
+          gap: { xs: 1, md: 2 },
+          flexDirection: { xs: 'column', sm: 'row' }
         }}>
-          <Grade sx={{ fontSize: '2rem', color: '#667eea' }} />
+          <Grade sx={{ fontSize: { xs: '1.5rem', md: '2rem' }, color: '#667eea' }} />
           Academic Marks
         </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
+        <Typography variant={{ xs: 'body2', md: 'subtitle1' }} color="text.secondary">
           Track your academic performance and progress
         </Typography>
       </Box>
 
       {/* Stats Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      <Grid container spacing={{ xs: 2, md: 3 }} sx={{ mb: { xs: 2, md: 4 } }}>
         <Grid item xs={12} sm={6} md={3}>
           <Card sx={{ 
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             color: 'white',
             boxShadow: '0 4px 20px rgba(102, 126, 234, 0.3)'
           }}>
-            <CardContent>
+            <CardContent sx={{ p: { xs: 2, md: 3 } }}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
-                  <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                  <Typography variant={{ xs: 'h5', md: 'h4' }} sx={{ fontWeight: 700 }}>
                     {marks.length}
                   </Typography>
                   <Typography variant="body2" sx={{ opacity: 0.9 }}>
                     Total Marks
                   </Typography>
                 </Box>
-                <Assessment sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+                <Assessment sx={{ fontSize: { xs: '2rem', md: '2.5rem' }, opacity: 0.8 }} />
               </Box>
             </CardContent>
           </Card>
@@ -134,17 +135,17 @@ const MarksPage = ({ userId }) => {
             color: 'white',
             boxShadow: '0 4px 20px rgba(245, 87, 108, 0.3)'
           }}>
-            <CardContent>
+            <CardContent sx={{ p: { xs: 2, md: 3 } }}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
-                  <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                  <Typography variant={{ xs: 'h5', md: 'h4' }} sx={{ fontWeight: 700 }}>
                     {marks.length > 0 ? Math.round(marks.reduce((sum, mark) => sum + mark.marks, 0) / marks.length) : 0}
                   </Typography>
                   <Typography variant="body2" sx={{ opacity: 0.9 }}>
                     Average Score
                   </Typography>
                 </Box>
-                <TrendingUp sx={{ fontSize: '2.5rem', opacity: 0.8 }} />
+                <TrendingUp sx={{ fontSize: { xs: '2rem', md: '2.5rem' }, opacity: 0.8 }} />
               </Box>
             </CardContent>
           </Card>
@@ -152,8 +153,8 @@ const MarksPage = ({ userId }) => {
       </Grid>
 
       {/* Marks Form */}
-      <Paper sx={{ p: 3, mb: 3, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
-        <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: '#2c3e50' }}>
+      <Paper sx={{ p: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 }, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+        <Typography variant={{ xs: 'subtitle1', md: 'h6' }} sx={{ mb: 2, fontWeight: 600, color: '#2c3e50' }}>
           Add New Mark
         </Typography>
         <MarksForm onMarkAdded={reloadMarks} userId={userId} />
