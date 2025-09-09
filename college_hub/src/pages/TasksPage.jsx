@@ -53,6 +53,55 @@ const TasksPage = ({ userId }) => {
   const [severity, setSeverity] = useState("success");
   const [showSnackbar, setShowSnackbar] = useState(false);
 
+  // Mock data for UI testing
+  const mockTasks = [
+    {
+      _id: "1",
+      title: "Complete Physics Assignment",
+      description: "Solve problems from Chapter 5 - Thermodynamics",
+      startDateTime: "2024-01-15T10:00:00Z",
+      deadline: "2024-01-20T23:59:00Z",
+      studentId: userId,
+      createdAt: "2024-01-15T08:00:00Z"
+    },
+    {
+      _id: "2",
+      title: "Math Quiz Preparation",
+      description: "Study calculus integration formulas and practice problems",
+      startDateTime: "2024-01-16T09:00:00Z", 
+      deadline: "2024-01-18T14:00:00Z",
+      studentId: userId,
+      createdAt: "2024-01-16T07:30:00Z"
+    },
+    {
+      _id: "3",
+      title: "Chemistry Lab Report",
+      description: "Write lab report for organic chemistry experiment",
+      startDateTime: "2024-01-14T11:00:00Z",
+      deadline: "2024-01-17T17:00:00Z", 
+      studentId: userId,
+      createdAt: "2024-01-14T09:15:00Z"
+    },
+    {
+      _id: "4",
+      title: "English Essay",
+      description: "Write 1500-word essay on Shakespeare's Hamlet",
+      startDateTime: "2024-01-10T14:00:00Z",
+      deadline: "2024-01-12T23:59:00Z",
+      studentId: userId,
+      createdAt: "2024-01-10T12:00:00Z"
+    },
+    {
+      _id: "5",
+      title: "Computer Science Project",
+      description: "Develop a web application using React and Node.js",
+      startDateTime: "2024-01-08T16:00:00Z",
+      deadline: "2024-01-25T18:00:00Z",
+      studentId: userId,
+      createdAt: "2024-01-08T14:30:00Z"
+    }
+  ];
+
   useEffect(() => {
     if (userId) {
       fetchTasks();
@@ -68,20 +117,22 @@ const TasksPage = ({ userId }) => {
   const fetchTasks = async () => {
     try {
       if (!userId) {
-        console.log('No userId provided');
+        console.log('No userId provided, using mock data');
+        setTasks(mockTasks);
         return;
       }
       const res = await getTasks(userId);
       setTasks(res.data);
     } catch (err) {
       console.error('Error fetching tasks:', err);
+      console.log('Database error, using mock data for tasks');
+      setTasks(mockTasks);
       if (err.response?.status === 401) {
         // Handle unauthorized error specifically
-        showMessage("Session expired. Please log in again.", "error");
+        showMessage("Session expired. Using sample data for demo.", "warning");
       } else {
-        showMessage("Failed to fetch tasks", "error");
+        showMessage("Failed to load tasks from database. Showing sample data.", "warning");
       }
-      setTasks([]);
     }
   };
 

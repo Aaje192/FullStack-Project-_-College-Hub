@@ -35,19 +35,39 @@ const ProfilePage = ({ userId }) => {
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const theme = useTheme();
 
+  // Mock data for UI testing
+  const mockProfile = {
+    id: userId || "STU001",
+    username: "john_doe",
+    email: "john.doe@college.edu",
+    mobile: "+1 (555) 123-4567",
+    department: "Computer Science",
+    year: "3rd Year",
+    rollNumber: "CS2021001",
+    fullName: "John Doe",
+    address: "123 College Street, University Town",
+    dateOfBirth: "2001-05-15",
+    guardianName: "Robert Doe",
+    guardianPhone: "+1 (555) 987-6543"
+  };
+
   const fetchProfile = async () => {
     if (userId) {
       try {
         const res = await getProfile(userId);
         setProfile(res.data);
       } catch (error) {
+        console.log('Database error, using mock data for profile');
+        setProfile(mockProfile);
         setSnackbar({
           open: true,
-          message: 'Failed to load profile',
-          severity: 'error'
+          message: 'Failed to load profile from database. Showing sample data.',
+          severity: 'warning'
         });
-        setProfile(null);
       }
+    } else {
+      // Use mock data when no userId is provided
+      setProfile(mockProfile);
     }
   };
 
