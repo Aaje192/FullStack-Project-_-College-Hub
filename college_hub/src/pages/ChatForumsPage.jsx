@@ -32,6 +32,52 @@ const ChatForumsPage = ({ userId }) => {
   const messagesEndRef = useRef(null);
   const pollInterval = useRef(null);
 
+  // Mock data for UI testing
+  const mockMessages = [
+    {
+      _id: "1",
+      senderId: "user1",
+      senderName: "Alice Johnson",
+      message: "Hey everyone! Has anyone completed the physics assignment yet?",
+      timestamp: "2024-01-15T10:30:00Z"
+    },
+    {
+      _id: "2", 
+      senderId: userId,
+      senderName: "You",
+      message: "I'm working on it right now. The thermodynamics problems are quite challenging!",
+      timestamp: "2024-01-15T10:32:00Z"
+    },
+    {
+      _id: "3",
+      senderId: "user2", 
+      senderName: "Bob Smith",
+      message: "Same here! Question 3 is particularly tricky. Anyone want to form a study group?",
+      timestamp: "2024-01-15T10:35:00Z"
+    },
+    {
+      _id: "4",
+      senderId: "user3",
+      senderName: "Carol Davis",
+      message: "Great idea! I'm free this afternoon. We could meet in the library.",
+      timestamp: "2024-01-15T10:37:00Z"
+    },
+    {
+      _id: "5",
+      senderId: userId,
+      senderName: "You", 
+      message: "Count me in! What time works for everyone?",
+      timestamp: "2024-01-15T10:40:00Z"
+    },
+    {
+      _id: "6",
+      senderId: "user4",
+      senderName: "Dave Wilson",
+      message: "How about 3 PM? I can bring my notes from the last lecture.",
+      timestamp: "2024-01-15T10:42:00Z"
+    }
+  ];
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -42,8 +88,11 @@ const ChatForumsPage = ({ userId }) => {
       setMessages(fetchedMessages);
       scrollToBottom();
     } catch (err) {
-      setError('Failed to load messages');
+      console.log('Database error, using mock data for chat messages');
+      setMessages(mockMessages);
+      setError('Failed to load messages from database. Showing sample conversation.');
       console.error(err);
+      scrollToBottom();
     }
   };
 
